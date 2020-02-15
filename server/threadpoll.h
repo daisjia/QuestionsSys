@@ -7,12 +7,12 @@
 #include<memory>
 #include<functional>
 #include<iostream>
-#include"mytime.h"
-#include"human.pb.h"
+#include "log.h"
 #include"control.h"
 #include<stdlib.h>
 #include<unistd.h>
 #include<iostream>
+#include"pdu.h"
 
 
 class ThreadPoll
@@ -20,9 +20,9 @@ class ThreadPoll
 public:
 	ThreadPoll(int threadnum);
 	~ThreadPoll();
-	bool AppandTask(int task, std::string message);
+	bool AppandTask(int task, std::string ReqMsg);
 	void ThreadWork(void);
-	void Task(int task, std::string message);
+	void Task(int fd, std::string ReqMsg);
 
 public:
 	std::mutex _mtx;

@@ -6,6 +6,7 @@
 #include "mysql.h"
 #include<sys/epoll.h>
 #include<map>
+#include"pdu.h"
 
 class Sys
 {

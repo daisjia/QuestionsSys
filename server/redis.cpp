@@ -9,10 +9,10 @@ Redis::Redis()
 	if (_redis->err)
 	{
 		redisFree(_redis);
-		LOG("connect to reidsServer fail!");
+		LOGE("connect to reidsServer fail!");
 		return;
 	}
-	LOG("connect to redisServer success!");
+	LOGI("connect to redisServer success!");
 }
 
 bool Redis::RedisCommand(const std::string command, redisReply*(&reply))
@@ -21,14 +21,12 @@ bool Redis::RedisCommand(const std::string command, redisReply*(&reply))
 	if (reply == NULL)
 	{
 		freeReplyObject(reply);
-		char buff[100] = { 0 };
-		sprintf(buff, "redis execut [ %s ] fail!", command.c_str());
-		LOG(buff);
+		LOGE("redis execut [ %s ] fail!", command.c_str());
 		return false;
 	}
 	if (reply->type == REDIS_REPLY_ERROR)
 	{
-		LOG(reply->str);
+		LOGE(reply->str);
 		freeReplyObject(reply);
 		return false;
 	}

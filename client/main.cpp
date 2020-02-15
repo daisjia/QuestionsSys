@@ -4,17 +4,14 @@
 #include<hiredis/hiredis.h>
 #include<iostream>
 using namespace std;
-#include"human.pb.h"
+#include"IM.User.Msg.pb.h"
 #include<netinet/in.h>
 #include<arpa/inet.h>
 #include<sys/socket.h>
 #include<string.h>
 #include<memory>
-enum TYPE
-{
-	REGISTER,
-	LOGIN,
-};
+#include"pdu.h"
+
 
 int main()
 {
@@ -27,23 +24,35 @@ int main()
 	saddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	saddr.sin_port = htons(port);
 	connect(fd, (sockaddr*)&saddr, sizeof(saddr));
-	HumanValue::Person person;
-	person.set_id(456);
-	person.set_name("jiadai");
-	person.set_passwd("123456");
-	person.set_type(HumanValue::Person_HumanType::Person_HumanType_Student);
-	std::string str;
-	person.SerializeToString(&str);
-	send(fd, str.c_str(), 1024, 0);
-	char buff1[1024] = { 0 };
-	int n = recv(fd, buff1, 1024, 0);
-	string message = buff1;
-	
-	HumanValue::Result res;
+
+
+	IM::User::Msg::IMLoginReq Msg;
+	Msg.set_id(123);
+	Msg.set_passwd("123456");
+	Msg.set_type(IM::User::Msg::IMLoginReq_HumanType_Student);
+	std::string RspMsg;
+	Msg.SerializeToString(&RspMsg);
+	char RspBuffer[1024 * 1024] = { 0 };
+	PDUHEAD pReqHeader;
+	pReqHeader.SetCmd(LOGIN);
+	memcpy(RspBuffer, (void*)&pReqHeader, pReqHeader.GetHeadLen());
+	memcpy(RspBuffer + pReqHeader.GetHeadLen(), RspMsg.c_str(), RspMsg.size());
+	((PDUHEAD*)RspBuffer)->SetPackLen(pReqHeader.GetHeadLen() + RspMsg.size());
+	send(fd, RspBuffer, pReqHeader.GetHeadLen() + RspMsg.size(), 0);
+
+
+	//===========================================================
+
+
+	char buff1[1024 * 1024] = { 0 };
+	recv(fd, buff1, 1024*1024, 0);
+	string message = ((PDUHEAD*)buff1)->GetBody();
+	//cout << "headsize: " << ((PDUHEAD*)buff1)->GetHeadLen() << "  bodysize: " << ((PDUHEAD*)buff1)->GetPackLen() << endl;
+	IM::User::Msg::IMRspMsg res;
 	res.ParseFromString(message);
 	int ret = res.ret();
-	string rsp = res.rsp();
-	cout << ret << "  " << rsp << endl;
+	string msg = res.msg();
+	cout << ret << "  " << msg << endl;
 }
 
 #if 0

@@ -1,7 +1,7 @@
 INC += -I./
 LIB +=  -ljson -levent -lpthread -lhiredis -lmysqlclient -lprotobuf -pthread
 OBJ_DIR = ./obj
-OBJ =  $(OBJ_DIR)/main.o $(OBJ_DIR)/human.pb.o
+OBJ =  $(OBJ_DIR)/main.o $(OBJ_DIR)/IM.User.Msg.pb.o $(OBJ_DIR)/pdu.o
 OBJ_EXT = .o
 CXX_EXT = .cpp
 CC_EXT = .cc

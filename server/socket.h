@@ -14,7 +14,7 @@
 #include<iostream>
 #include <fcntl.h>
 #include<unistd.h>
-#include"mytime.h"
+#include "log.h"
 #include<memory>
 
 class Socket
@@ -27,8 +27,7 @@ public:
 	std::string GetIp();
 	int GetPort();
 	int GetSerFd();
-	int Send(int fd, const std::string message);
-	int Recv(int fd, std::string& message);
+
 private:
 	std::string _ip;
 	int _port;

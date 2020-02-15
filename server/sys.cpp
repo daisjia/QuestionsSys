@@ -1,4 +1,3 @@
-
 #include "sys.h"
 
 #define SIZE 10000
@@ -40,7 +39,7 @@ Sys::Sys(std::string ip, int port)
 	_epollfd = epoll_create(20);
 	if (_epollfd == -1)
 	{
-		LOG("epollfd create fail!");
+		LOGE("epollfd create fail!");
 		return;
 	}
 	struct epoll_event event;
@@ -53,11 +52,12 @@ void Sys::Run()
 {
 	while (true)
 	{
+		__TIC1__(Epoll_Wait);
 		struct epoll_event events[SIZE];
 		int n = epoll_wait(_epollfd, events, SIZE, -1);
 		if (n <= 0)
 		{
-			LOG("epoll wait fail!");
+			LOGE("epoll wait fail!");
 			continue;
 		}
 		for (int i = 0; i < n; ++i)
@@ -67,9 +67,7 @@ void Sys::Run()
 			{
 				struct sockaddr_in caddr;
 				int clifd = _server->Accept(_server->GetSerFd(),caddr);
-				char buff[100] = { 0 };
-				sprintf(buff, "ip: %s, port: %d connect success!", inet_ntoa(caddr.sin_addr), ntohs(caddr.sin_port));
-				LOG(buff);
+				LOGI("ip: %s, port: %d connect success!", inet_ntoa(caddr.sin_addr), ntohs(caddr.sin_port));
 				if (clifd <= 0)
 				{
 					continue;
@@ -85,17 +83,18 @@ void Sys::Run()
 			{
 				epoll_ctl(_epollfd, EPOLL_CTL_DEL, fd, NULL);
 				close(fd);
-				char buff[100];
-				sprintf(buff, "ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
 				_cliInfo.erase(fd);
-				LOG(buff);
+				LOGI("ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
 			}
 			else if (events[i].events & EPOLLIN)
 			{
-				char buff[1024 * 1024] = { 0 };
-				Recv(fd, buff);
-				_threadPoll->AppandTask(fd, buff);
+				char RspBuffer[1024 * 1024] = { 0 };
+				Recv(fd, RspBuffer);
+				PDUHEAD* pReqHeader = (PDUHEAD*)RspBuffer;
+				std::string ReqMsg(RspBuffer, pReqHeader->GetPackLen());
+				_threadPoll->AppandTask(fd, ReqMsg);
 			}
 		}
+		__TOC1__(Epoll_Wait);
 	}
 }

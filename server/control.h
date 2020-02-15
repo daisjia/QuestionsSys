@@ -6,15 +6,11 @@
 #include<arpa/inet.h>
 #include<sys/socket.h>
 #include<map>
-#include"human.pb.h"
+#include"IM.User.Msg.pb.h"
 #include"redis.h"
 #include"mysql.h"
-
-enum TYPE
-{
-	REGISTER,
-	LOGIN,
-};
+#include"pdu.h"
+#include"log.h"
 
 bool Register(int fd, std::string message);
 bool Login(int fd, std::string message);
@@ -27,4 +23,4 @@ public:
 	std::map<int, std::function<bool(int, std::string)>> _model;
 };
 
-void SendResult(int fd, int ret, std::string message);
+void SendResult(int fd, int cmd, int ret, std::string Msg);

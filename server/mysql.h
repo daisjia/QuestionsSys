@@ -4,7 +4,7 @@
 #include<string>
 #include<exception>
 #include<mutex>
-#include"mytime.h"
+#include"log.h"
 
 class Mysql
 {

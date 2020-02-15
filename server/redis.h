@@ -1,7 +1,7 @@
 #pragma once
 #include<stdlib.h>
 #include<stddef.h>
-#include"mytime.h"
+#include"log.h"
 #include<string>
 #include<hiredis/hiredis.h>
 #include<mutex>

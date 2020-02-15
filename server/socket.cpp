@@ -5,7 +5,7 @@ Socket::Socket(const char* ip, const int port)
 	_serfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serfd == -1)
 	{
-		LOG("socket create fail!");
+		LOGE("socket create fail!");
 		return;
 	}
 
@@ -17,19 +17,19 @@ Socket::Socket(const char* ip, const int port)
 	int ret = bind(_serfd, (struct sockaddr*) & saddr, sizeof(sockaddr));
 	if (ret == -1)
 	{
-		LOG("socket bind fail!");
+		LOGE("socket bind fail!");
 		return;
 	}
 	ret = listen(_serfd, 20);
 	if (ret == -1)
 	{
-		LOG("server listen fail!");
+		LOGE("server listen fail!");
 		return;
 	}
 
 	_ip = ip;
 	_port = port;
-	LOG("Server StartUp Success!");
+	LOGI("Server StartUp Success!");
 }
 
 int Socket::Connect(int fd, sockaddr_in& saddr)
@@ -61,16 +61,3 @@ int Socket::GetSerFd()
 	return _serfd;
 }
 
-int Socket::Send(int fd, const std::string message)
-{
-	int ret = send(fd, message.c_str(), message.size(), 0);
-	return ret;
-}
-
-int Socket::Recv(int fd, std::string& message)
-{
-	char buff[1024 * 1024] = { 0 };
-	int ret = recv(fd, buff, 1024 * 1024, 0);
-	message = buff;
-	return ret;
-}
