@@ -24,16 +24,14 @@ public:
 		return sys;
 	}
 
-	void Run();
+	void Run();	
+	static Sys* sys;
 private:
+	void Recv(int fd, char* buff);
 	Sys(std::string ip, int port);
 	std::unique_ptr<Socket> _server;
 	std::unique_ptr<ThreadPoll> _threadPoll;
-	std::unique_ptr<Mysql> _mysql;
-	std::unique_ptr<Redis> _redis;
 	int _epollfd;
 	std::map<int, struct sockaddr_in> _cliInfo;
-
 	static std::mutex mux;
-	static Sys* sys;
 };

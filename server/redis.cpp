@@ -1,8 +1,11 @@
 #include "redis.h"
 
-Redis::Redis(std::string ip, int port)
+Redis* Redis::redis = NULL;
+std::mutex Redis::mux;
+
+Redis::Redis()
 {
-	_redis = redisConnect(ip.c_str(), port);
+	_redis = redisConnect("127.0.0.1", 6379);
 	if (_redis->err)
 	{
 		redisFree(_redis);
@@ -12,16 +15,21 @@ Redis::Redis(std::string ip, int port)
 	LOG("connect to redisServer success!");
 }
 
-bool Redis::RedisCommand(const std::string command)
+bool Redis::RedisCommand(const std::string command, redisReply*(&reply))
 {
-	std::unique_lock<std::mutex> lok(_mtx);
-	_reply = (redisReply*)redisCommand(_redis, command.c_str());
-	if (_reply == NULL)
+	reply = (redisReply*)redisCommand(_redis, command.c_str());
+	if (reply == NULL)
 	{
-		freeReplyObject(_reply);
+		freeReplyObject(reply);
 		char buff[100] = { 0 };
 		sprintf(buff, "redis execut [ %s ] fail!", command.c_str());
 		LOG(buff);
+		return false;
+	}
+	if (reply->type == REDIS_REPLY_ERROR)
+	{
+		LOG(reply->str);
+		freeReplyObject(reply);
 		return false;
 	}
 	return true;

@@ -1,8 +1,7 @@
 INC += -I./
 LIB +=  -ljson -levent -lpthread -lhiredis -lmysqlclient -lprotobuf -pthread
 OBJ_DIR = ./obj
-OBJ =  $(OBJ_DIR)/socket.o  $(OBJ_DIR)/sys.o $(OBJ_DIR)/main.o $(OBJ_DIR)/mytime.o $(OBJ_DIR)/mysql.o $(OBJ_DIR)/redis.o \
-	$(OBJ_DIR)/threadpoll.o $(OBJ_DIR)/human.pb.o $(OBJ_DIR)/control.o 
+OBJ =  $(OBJ_DIR)/main.o $(OBJ_DIR)/human.pb.o
 OBJ_EXT = .o
 CXX_EXT = .cpp
 CC_EXT = .cc
@@ -10,20 +9,20 @@ CC_EXT = .cc
 main : $(OBJ)
 	@echo
 	@echo "Linking..."
-	g++ -o main -std=c++11 $(OBJ) $(LIB) -g
+	g++ -o main -std=c++11 $(OBJ) $(LIB)
 	@echo
 
 $(OBJ_DIR)/%$(OBJ_EXT) : %$(CXX_EXT)
 	@echo
 	@echo "Compiling $< ==> $@..."
 	@-mkdir -p $(OBJ_DIR)
-	g++ -c -g -std=c++11 $< -o $@
+	g++ -c -std=c++11 $< -o $@
 
 $(OBJ_DIR)/%$(OBJ_EXT) : %$(CC_EXT)
 	@echo
 	@echo "Compiling $< ==> $@..."
 	@-mkdir -p $(OBJ_DIR)
-	g++ -c -g -std=c++11 $< -o $@
+	g++ -c -std=c++11 $< -o $@
 
 proto:
 	@echo

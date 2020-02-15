@@ -1,4 +1,6 @@
 #include "mysql.h"
+Mysql * Mysql::mysql = NULL;
+std::mutex Mysql::mux;
 
 Mysql::Mysql()
 {

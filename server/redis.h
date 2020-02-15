@@ -9,10 +9,25 @@
 class Redis
 {
 public:
-	Redis(std::string, int port);
-	bool RedisCommand(const std::string command);
+	static Redis* GetRedis()
+	{
+		if (redis == NULL)
+		{
+			mux.lock();
+			if (redis == NULL)
+			{
+				redis = new Redis();
+			}
+			mux.unlock();
+		}
+		return redis;
+	}
+	bool RedisCommand(const std::string command, redisReply* (&reply));
 public:
 	redisContext* _redis;
 	redisReply* _reply;
-	std::mutex _mtx;
+	static Redis* redis;
+private: 
+	Redis();
+	static std::mutex mux;
 };

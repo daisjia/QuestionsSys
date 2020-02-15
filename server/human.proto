@@ -1,0 +1,24 @@
+syntax="proto2";
+package HumanValue;
+
+message Person
+{
+	required string name = 1;
+	required int32 id = 2;
+	required string passwd = 3;
+	
+	enum HumanType
+	{
+		Student = 0;
+		Administrator = 1;
+	}
+
+	required HumanType type = 4 [default = Student];
+}
+
+message Result
+{
+	required string rsp = 2;
+	required int32 ret = 1;
+}
+
