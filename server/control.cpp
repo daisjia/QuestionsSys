@@ -50,8 +50,9 @@ bool Register(int fd, std::string ReqMsg)
 		freeReplyObject(reply);
 		return false;
 	}
-	if (reply->type != REDIS_REPLY_NIL)
+	if (reply->type != REDIS_REPLY_NIL && reply->elements != 0)
 	{
+		LOGE("redis get data!");
 		freeReplyObject(reply);
 		SendResult(fd, REGISTER, IM_ERROR, "user has exist!");
 		return false;
@@ -61,6 +62,7 @@ bool Register(int fd, std::string ReqMsg)
 	sprintf(sqlCmd, "select id from user where id = %d", id);
 	if (mysql_real_query(mysql->mpcon, sqlCmd, strlen(sqlCmd)))
 	{
+		LOGE("mysql get data!");
 		LOGE("mysql select fail!");
 		SendResult(fd, REGISTER, IM_ERROR, "server error, register fail!");
 		return false;
@@ -84,7 +86,8 @@ bool Register(int fd, std::string ReqMsg)
 		return false;
 	}
 	
-	SendResult(fd, REGISTER, IM_OK, "user register success!");
+	LOGE("mysql get data!");
+	SendResult(fd, REGISTER, IM_OK, "register success!");
 	return true;
 }
 
@@ -104,58 +107,69 @@ bool Login(int fd, std::string ReqMsg)
 	if (!redis->RedisCommand(redisCmd, reply))
 	{
 		LOGE("redis command fail!");
-		SendResult(fd, REGISTER, IM_ERROR, "server error, login fail!");
+		SendResult(fd, LOGIN, IM_ERROR, "server error, login fail!");
 		freeReplyObject(reply);
 		return false;
 	}
-	if (reply->type != REDIS_REPLY_NIL)
+
+	if (reply->type != REDIS_REPLY_NIL && reply->elements >= 8)
 	{
 		int __id = atoi(reply->element[1]->str);
 		std::string pw = reply->element[5]->str;
+		int __type = atoi(reply->element[7]->str);
 		freeReplyObject(reply);
-		if (__id == id && pw == passwd)
+		if (__id == id && pw == passwd && type == __type)
 		{
-			SendResult(fd, IM_OK, LOGIN, "login success!");
+			LOGE("redis get data!");
+			SendResult(fd, IM_OK, IM_OK, "login success!");
 			return true;
 		}
 		else
 		{
-			SendResult(fd, IM_ERROR, LOGIN, "passwd error, login fail!");
+			SendResult(fd, LOGIN, LOGIN, "passwd error, login fail!");
 			return false;
 		}
 	}
 	freeReplyObject(reply);
-	//=============================================
 
-	//char sqlCmd[100] = { 0 };
-	//sprintf(sqlCmd, "select id from user where id = %d", id);
-	//if (mysql_real_query(mysql->mpcon, sqlCmd, strlen(sqlCmd)))
-	//{
-	//	LOGE("mysql select fail!");
-	//	SendResult(fd, REGISTER, IM_ERROR, "server error, register fail!");
-	//	return false;
-	//}
-	//MYSQL_RES* mp_res;
-	//MYSQL_ROW mp_row;
-	//mp_res = mysql_store_result(mysql->mpcon);
-	//mp_row = mysql_fetch_row(mp_res);
+	char sqlCmd[100] = { 0 };
+	sprintf(sqlCmd, "select id, name ,passwd, type from user where id = %d", id);
+	if (mysql_real_query(mysql->mpcon, sqlCmd, strlen(sqlCmd)))
+	{
+		LOGE("mysql select fail!");
+		SendResult(fd, LOGIN, IM_ERROR, "server error, register fail!");
+		return false;
+	}
+	MYSQL_RES* mp_res;
+	MYSQL_ROW mp_row;
+	/*
+		存在并发问题
+	*/
+	mp_res = mysql_store_result(mysql->mpcon);
+	mp_row = mysql_fetch_row(mp_res);
 
-	//if (mp_row != 0)
-	//{
-	//	SendResult(fd, REGISTER, IM_ERROR, "user has exist!");
-	//	return false;
-	//}
+	if (mp_row == 0)
+	{
+		SendResult(fd, LOGIN, IM_ERROR, "user has not exist!");
+		return false;
+	}
 
-	////sprintf(sqlCmd, "insert into user value (%d, \"%s\", \"%s\", %d)", id, name.c_str(), passwd.c_str(), type);
-	//if (mysql_real_query(mysql->mpcon, sqlCmd, strlen(sqlCmd)))
-	//{
-	//	LOGE("mysql insert fail!");
-	//	SendResult(fd, REGISTER, IM_ERROR, "server error, register fail!");
-	//	return false;
-	//}
-
-	//SendResult(fd, REGISTER, IM_OK, "user register success!");
-	//return true;
+	if (atoi(mp_row[0]) == id && passwd == mp_row[2] && type == atoi(mp_row[3]))
+	{
+		SendResult(fd, LOGIN, IM_OK, "login success!");
+		sprintf(redisCmd, "hmset user:id:%d id %d name %s passwd %s type %d", id, id, mp_row[1], passwd.c_str(), type);
+		if (!redis->RedisCommand(redisCmd, reply))
+		{
+			LOGE("redis command fail!");
+			freeReplyObject(reply);
+			return false;
+		}
+		return true;
+	}
+	
+	LOGE("mysql get data!")
+	SendResult(fd, LOGIN, IM_ERROR, "passwd error, login fail!");
+	return false;
 }
 
 

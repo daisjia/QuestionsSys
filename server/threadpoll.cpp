@@ -8,6 +8,7 @@ ThreadPoll::ThreadPoll(int threadnum)
 	for (int i = 0; i < _threadNum; ++i)
 	{
 		_thread.push_back(std::make_shared<std::thread>(std::bind(&ThreadPoll::ThreadWork, this)));
+		std::cout << "----------------Thread id: < "<< _thread[i]->get_id() <<" > Running...----------------" << std::endl;
 	}
 	_control.reset(new Control);
 }
@@ -49,6 +50,7 @@ void ThreadPoll::ThreadWork()
 			}
 			if (!_tasks.empty())
 			{
+				std::cout << "----------------Thread id: < " << std::this_thread::get_id() << " > Dealing...----------------" << std::endl;
 				fd = _tasks.front().first;
 				ReqMsg = _tasks.front().second;
 				_tasks.pop_front();

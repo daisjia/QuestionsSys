@@ -31,7 +31,6 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
@@ -79,52 +78,6 @@ namespace IM {
 namespace User {
 namespace Msg {
 
-enum IMRegisterReq_HumanType : int {
-  IMRegisterReq_HumanType_Student = 0,
-  IMRegisterReq_HumanType_Administrator = 1
-};
-bool IMRegisterReq_HumanType_IsValid(int value);
-constexpr IMRegisterReq_HumanType IMRegisterReq_HumanType_HumanType_MIN = IMRegisterReq_HumanType_Student;
-constexpr IMRegisterReq_HumanType IMRegisterReq_HumanType_HumanType_MAX = IMRegisterReq_HumanType_Administrator;
-constexpr int IMRegisterReq_HumanType_HumanType_ARRAYSIZE = IMRegisterReq_HumanType_HumanType_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* IMRegisterReq_HumanType_descriptor();
-template<typename T>
-inline const std::string& IMRegisterReq_HumanType_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, IMRegisterReq_HumanType>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function IMRegisterReq_HumanType_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    IMRegisterReq_HumanType_descriptor(), enum_t_value);
-}
-inline bool IMRegisterReq_HumanType_Parse(
-    const std::string& name, IMRegisterReq_HumanType* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<IMRegisterReq_HumanType>(
-    IMRegisterReq_HumanType_descriptor(), name, value);
-}
-enum IMLoginReq_HumanType : int {
-  IMLoginReq_HumanType_Student = 0,
-  IMLoginReq_HumanType_Administrator = 1
-};
-bool IMLoginReq_HumanType_IsValid(int value);
-constexpr IMLoginReq_HumanType IMLoginReq_HumanType_HumanType_MIN = IMLoginReq_HumanType_Student;
-constexpr IMLoginReq_HumanType IMLoginReq_HumanType_HumanType_MAX = IMLoginReq_HumanType_Administrator;
-constexpr int IMLoginReq_HumanType_HumanType_ARRAYSIZE = IMLoginReq_HumanType_HumanType_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* IMLoginReq_HumanType_descriptor();
-template<typename T>
-inline const std::string& IMLoginReq_HumanType_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, IMLoginReq_HumanType>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function IMLoginReq_HumanType_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    IMLoginReq_HumanType_descriptor(), enum_t_value);
-}
-inline bool IMLoginReq_HumanType_Parse(
-    const std::string& name, IMLoginReq_HumanType* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<IMLoginReq_HumanType>(
-    IMLoginReq_HumanType_descriptor(), name, value);
-}
 // ===================================================================
 
 class IMRegisterReq :
@@ -237,36 +190,6 @@ class IMRegisterReq :
 
   // nested types ----------------------------------------------------
 
-  typedef IMRegisterReq_HumanType HumanType;
-  static constexpr HumanType Student =
-    IMRegisterReq_HumanType_Student;
-  static constexpr HumanType Administrator =
-    IMRegisterReq_HumanType_Administrator;
-  static inline bool HumanType_IsValid(int value) {
-    return IMRegisterReq_HumanType_IsValid(value);
-  }
-  static constexpr HumanType HumanType_MIN =
-    IMRegisterReq_HumanType_HumanType_MIN;
-  static constexpr HumanType HumanType_MAX =
-    IMRegisterReq_HumanType_HumanType_MAX;
-  static constexpr int HumanType_ARRAYSIZE =
-    IMRegisterReq_HumanType_HumanType_ARRAYSIZE;
-  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  HumanType_descriptor() {
-    return IMRegisterReq_HumanType_descriptor();
-  }
-  template<typename T>
-  static inline const std::string& HumanType_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, HumanType>::value ||
-      ::std::is_integral<T>::value,
-      "Incorrect type passed to function HumanType_Name.");
-    return IMRegisterReq_HumanType_Name(enum_t_value);
-  }
-  static inline bool HumanType_Parse(const std::string& name,
-      HumanType* value) {
-    return IMRegisterReq_HumanType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
   enum : int {
@@ -328,17 +251,17 @@ class IMRegisterReq :
   void _internal_set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
-  // required .IM.User.Msg.IMRegisterReq.HumanType type = 4 [default = Student];
+  // required int32 type = 4;
   bool has_type() const;
   private:
   bool _internal_has_type() const;
   public:
   void clear_type();
-  ::IM::User::Msg::IMRegisterReq_HumanType type() const;
-  void set_type(::IM::User::Msg::IMRegisterReq_HumanType value);
+  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
+  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
   private:
-  ::IM::User::Msg::IMRegisterReq_HumanType _internal_type() const;
-  void _internal_set_type(::IM::User::Msg::IMRegisterReq_HumanType value);
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
+  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:IM.User.Msg.IMRegisterReq)
@@ -354,7 +277,7 @@ class IMRegisterReq :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr passwd_;
   ::PROTOBUF_NAMESPACE_ID::int32 id_;
-  int type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   friend struct ::TableStruct_IM_2eUser_2eMsg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -469,36 +392,6 @@ class IMLoginReq :
 
   // nested types ----------------------------------------------------
 
-  typedef IMLoginReq_HumanType HumanType;
-  static constexpr HumanType Student =
-    IMLoginReq_HumanType_Student;
-  static constexpr HumanType Administrator =
-    IMLoginReq_HumanType_Administrator;
-  static inline bool HumanType_IsValid(int value) {
-    return IMLoginReq_HumanType_IsValid(value);
-  }
-  static constexpr HumanType HumanType_MIN =
-    IMLoginReq_HumanType_HumanType_MIN;
-  static constexpr HumanType HumanType_MAX =
-    IMLoginReq_HumanType_HumanType_MAX;
-  static constexpr int HumanType_ARRAYSIZE =
-    IMLoginReq_HumanType_HumanType_ARRAYSIZE;
-  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  HumanType_descriptor() {
-    return IMLoginReq_HumanType_descriptor();
-  }
-  template<typename T>
-  static inline const std::string& HumanType_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, HumanType>::value ||
-      ::std::is_integral<T>::value,
-      "Incorrect type passed to function HumanType_Name.");
-    return IMLoginReq_HumanType_Name(enum_t_value);
-  }
-  static inline bool HumanType_Parse(const std::string& name,
-      HumanType* value) {
-    return IMLoginReq_HumanType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
   enum : int {
@@ -539,17 +432,17 @@ class IMLoginReq :
   void _internal_set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
-  // required .IM.User.Msg.IMLoginReq.HumanType type = 4 [default = Student];
+  // required int32 type = 4;
   bool has_type() const;
   private:
   bool _internal_has_type() const;
   public:
   void clear_type();
-  ::IM::User::Msg::IMLoginReq_HumanType type() const;
-  void set_type(::IM::User::Msg::IMLoginReq_HumanType value);
+  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
+  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
   private:
-  ::IM::User::Msg::IMLoginReq_HumanType _internal_type() const;
-  void _internal_set_type(::IM::User::Msg::IMLoginReq_HumanType value);
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
+  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:IM.User.Msg.IMLoginReq)
@@ -564,7 +457,7 @@ class IMLoginReq :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr passwd_;
   ::PROTOBUF_NAMESPACE_ID::int32 id_;
-  int type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   friend struct ::TableStruct_IM_2eUser_2eMsg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -913,7 +806,7 @@ inline void IMRegisterReq::set_allocated_passwd(std::string* passwd) {
   // @@protoc_insertion_point(field_set_allocated:IM.User.Msg.IMRegisterReq.passwd)
 }
 
-// required .IM.User.Msg.IMRegisterReq.HumanType type = 4 [default = Student];
+// required int32 type = 4;
 inline bool IMRegisterReq::_internal_has_type() const {
   bool value = (_has_bits_[0] & 0x00000008u) != 0;
   return value;
@@ -925,19 +818,18 @@ inline void IMRegisterReq::clear_type() {
   type_ = 0;
   _has_bits_[0] &= ~0x00000008u;
 }
-inline ::IM::User::Msg::IMRegisterReq_HumanType IMRegisterReq::_internal_type() const {
-  return static_cast< ::IM::User::Msg::IMRegisterReq_HumanType >(type_);
+inline ::PROTOBUF_NAMESPACE_ID::int32 IMRegisterReq::_internal_type() const {
+  return type_;
 }
-inline ::IM::User::Msg::IMRegisterReq_HumanType IMRegisterReq::type() const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 IMRegisterReq::type() const {
   // @@protoc_insertion_point(field_get:IM.User.Msg.IMRegisterReq.type)
   return _internal_type();
 }
-inline void IMRegisterReq::_internal_set_type(::IM::User::Msg::IMRegisterReq_HumanType value) {
-  assert(::IM::User::Msg::IMRegisterReq_HumanType_IsValid(value));
+inline void IMRegisterReq::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _has_bits_[0] |= 0x00000008u;
   type_ = value;
 }
-inline void IMRegisterReq::set_type(::IM::User::Msg::IMRegisterReq_HumanType value) {
+inline void IMRegisterReq::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_type(value);
   // @@protoc_insertion_point(field_set:IM.User.Msg.IMRegisterReq.type)
 }
@@ -1045,7 +937,7 @@ inline void IMLoginReq::set_allocated_passwd(std::string* passwd) {
   // @@protoc_insertion_point(field_set_allocated:IM.User.Msg.IMLoginReq.passwd)
 }
 
-// required .IM.User.Msg.IMLoginReq.HumanType type = 4 [default = Student];
+// required int32 type = 4;
 inline bool IMLoginReq::_internal_has_type() const {
   bool value = (_has_bits_[0] & 0x00000004u) != 0;
   return value;
@@ -1057,19 +949,18 @@ inline void IMLoginReq::clear_type() {
   type_ = 0;
   _has_bits_[0] &= ~0x00000004u;
 }
-inline ::IM::User::Msg::IMLoginReq_HumanType IMLoginReq::_internal_type() const {
-  return static_cast< ::IM::User::Msg::IMLoginReq_HumanType >(type_);
+inline ::PROTOBUF_NAMESPACE_ID::int32 IMLoginReq::_internal_type() const {
+  return type_;
 }
-inline ::IM::User::Msg::IMLoginReq_HumanType IMLoginReq::type() const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 IMLoginReq::type() const {
   // @@protoc_insertion_point(field_get:IM.User.Msg.IMLoginReq.type)
   return _internal_type();
 }
-inline void IMLoginReq::_internal_set_type(::IM::User::Msg::IMLoginReq_HumanType value) {
-  assert(::IM::User::Msg::IMLoginReq_HumanType_IsValid(value));
+inline void IMLoginReq::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _has_bits_[0] |= 0x00000004u;
   type_ = value;
 }
-inline void IMLoginReq::set_type(::IM::User::Msg::IMLoginReq_HumanType value) {
+inline void IMLoginReq::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_type(value);
   // @@protoc_insertion_point(field_set:IM.User.Msg.IMLoginReq.type)
 }
@@ -1190,21 +1081,6 @@ inline void IMRspMsg::set_allocated_msg(std::string* msg) {
 }  // namespace Msg
 }  // namespace User
 }  // namespace IM
-
-PROTOBUF_NAMESPACE_OPEN
-
-template <> struct is_proto_enum< ::IM::User::Msg::IMRegisterReq_HumanType> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::IM::User::Msg::IMRegisterReq_HumanType>() {
-  return ::IM::User::Msg::IMRegisterReq_HumanType_descriptor();
-}
-template <> struct is_proto_enum< ::IM::User::Msg::IMLoginReq_HumanType> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::IM::User::Msg::IMLoginReq_HumanType>() {
-  return ::IM::User::Msg::IMLoginReq_HumanType_descriptor();
-}
-
-PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
 

@@ -6,11 +6,13 @@
 
 #define REGISTER 1
 #define LOGIN 2
+#define EXIT 3
 
-typedef int result_t;
-#define OK 0
-#define ERROR -1
+#define IM_OK 1
+#define IM_ERROR -1
 
+#define STUDENT 0
+#define ADMIN 1
 
 
 typedef struct PDUHEADtag

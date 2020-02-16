@@ -6,28 +6,14 @@ message IMRegisterReq
 	required int32 id = 2;	//id,唯一编号
 	required string name = 1;
 	required string passwd = 3;
-	
-	enum HumanType
-	{
-		Student = 0;
-		Administrator = 1;
-	}
-
-	required HumanType type = 4 [default = Student];	//学生或老师
+	required int32 type = 4; 	//学生或老师
 }
 
 message IMLoginReq
 {
 	required int32 id = 1;
 	required string passwd = 2;
-
-	enum HumanType
-	{
-		Student = 0;
-		Administrator = 1;
-	}
-
-	required HumanType type = 4 [default = Student];
+	required int32 type = 4;
 }
 
 message IMRspMsg

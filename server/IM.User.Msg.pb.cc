@@ -75,7 +75,7 @@ static void InitDefaultsscc_info_IMRspMsg_IM_2eUser_2eMsg_2eproto() {
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_IMRspMsg_IM_2eUser_2eMsg_2eproto}, {}};
 
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_IM_2eUser_2eMsg_2eproto[3];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_IM_2eUser_2eMsg_2eproto[2];
+static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_IM_2eUser_2eMsg_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_IM_2eUser_2eMsg_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_IM_2eUser_2eMsg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -126,16 +126,11 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_IM_2eUser_2eMsg_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\021IM.User.Msg.proto\022\013IM.User.Msg\"\243\001\n\rIMR"
-  "egisterReq\022\n\n\002id\030\002 \002(\005\022\014\n\004name\030\001 \002(\t\022\016\n\006"
-  "passwd\030\003 \002(\t\022;\n\004type\030\004 \002(\0162$.IM.User.Msg"
-  ".IMRegisterReq.HumanType:\007Student\"+\n\tHum"
-  "anType\022\013\n\007Student\020\000\022\021\n\rAdministrator\020\001\"\217"
-  "\001\n\nIMLoginReq\022\n\n\002id\030\001 \002(\005\022\016\n\006passwd\030\002 \002("
-  "\t\0228\n\004type\030\004 \002(\0162!.IM.User.Msg.IMLoginReq"
-  ".HumanType:\007Student\"+\n\tHumanType\022\013\n\007Stud"
-  "ent\020\000\022\021\n\rAdministrator\020\001\"$\n\010IMRspMsg\022\013\n\003"
-  "ret\030\001 \002(\005\022\013\n\003msg\030\002 \002(\t"
+  "\n\021IM.User.Msg.proto\022\013IM.User.Msg\"G\n\rIMRe"
+  "gisterReq\022\n\n\002id\030\002 \002(\005\022\014\n\004name\030\001 \002(\t\022\016\n\006p"
+  "asswd\030\003 \002(\t\022\014\n\004type\030\004 \002(\005\"6\n\nIMLoginReq\022"
+  "\n\n\002id\030\001 \002(\005\022\016\n\006passwd\030\002 \002(\t\022\014\n\004type\030\004 \002("
+  "\005\"$\n\010IMRspMsg\022\013\n\003ret\030\001 \002(\005\022\013\n\003msg\030\002 \002(\t"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_IM_2eUser_2eMsg_2eproto_deps[1] = {
 };
@@ -147,7 +142,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_IM_
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_IM_2eUser_2eMsg_2eproto_once;
 static bool descriptor_table_IM_2eUser_2eMsg_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_IM_2eUser_2eMsg_2eproto = {
-  &descriptor_table_IM_2eUser_2eMsg_2eproto_initialized, descriptor_table_protodef_IM_2eUser_2eMsg_2eproto, "IM.User.Msg.proto", 382,
+  &descriptor_table_IM_2eUser_2eMsg_2eproto_initialized, descriptor_table_protodef_IM_2eUser_2eMsg_2eproto, "IM.User.Msg.proto", 199,
   &descriptor_table_IM_2eUser_2eMsg_2eproto_once, descriptor_table_IM_2eUser_2eMsg_2eproto_sccs, descriptor_table_IM_2eUser_2eMsg_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_IM_2eUser_2eMsg_2eproto::offsets,
   file_level_metadata_IM_2eUser_2eMsg_2eproto, 3, file_level_enum_descriptors_IM_2eUser_2eMsg_2eproto, file_level_service_descriptors_IM_2eUser_2eMsg_2eproto,
@@ -158,48 +153,6 @@ static bool dynamic_init_dummy_IM_2eUser_2eMsg_2eproto = (static_cast<void>(::PR
 namespace IM {
 namespace User {
 namespace Msg {
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* IMRegisterReq_HumanType_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_IM_2eUser_2eMsg_2eproto);
-  return file_level_enum_descriptors_IM_2eUser_2eMsg_2eproto[0];
-}
-bool IMRegisterReq_HumanType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-constexpr IMRegisterReq_HumanType IMRegisterReq::Student;
-constexpr IMRegisterReq_HumanType IMRegisterReq::Administrator;
-constexpr IMRegisterReq_HumanType IMRegisterReq::HumanType_MIN;
-constexpr IMRegisterReq_HumanType IMRegisterReq::HumanType_MAX;
-constexpr int IMRegisterReq::HumanType_ARRAYSIZE;
-#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* IMLoginReq_HumanType_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_IM_2eUser_2eMsg_2eproto);
-  return file_level_enum_descriptors_IM_2eUser_2eMsg_2eproto[1];
-}
-bool IMLoginReq_HumanType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-constexpr IMLoginReq_HumanType IMLoginReq::Student;
-constexpr IMLoginReq_HumanType IMLoginReq::Administrator;
-constexpr IMLoginReq_HumanType IMLoginReq::HumanType_MIN;
-constexpr IMLoginReq_HumanType IMLoginReq::HumanType_MAX;
-constexpr int IMLoginReq::HumanType_ARRAYSIZE;
-#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
 
 // ===================================================================
 
@@ -336,16 +289,12 @@ const char* IMRegisterReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .IM.User.Msg.IMRegisterReq.HumanType type = 4 [default = Student];
+      // required int32 type = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _Internal::set_has_type(&has_bits);
+          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-          if (PROTOBUF_PREDICT_TRUE(::IM::User::Msg::IMRegisterReq_HumanType_IsValid(val))) {
-            _internal_set_type(static_cast<::IM::User::Msg::IMRegisterReq_HumanType>(val));
-          } else {
-            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(4, val, mutable_unknown_fields());
-          }
         } else goto handle_unusual;
         continue;
       default: {
@@ -402,11 +351,10 @@ failure:
         3, this->_internal_passwd(), target);
   }
 
-  // required .IM.User.Msg.IMRegisterReq.HumanType type = 4 [default = Student];
+  // required int32 type = 4;
   if (cached_has_bits & 0x00000008u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
-      4, this->_internal_type(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_type(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -443,9 +391,10 @@ size_t IMRegisterReq::RequiredFieldsByteSizeFallback() const {
   }
 
   if (_internal_has_type()) {
-    // required .IM.User.Msg.IMRegisterReq.HumanType type = 4 [default = Student];
+    // required int32 type = 4;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_type());
   }
 
   return total_size;
@@ -470,9 +419,10 @@ size_t IMRegisterReq::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_id());
 
-    // required .IM.User.Msg.IMRegisterReq.HumanType type = 4 [default = Student];
+    // required int32 type = 4;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_type());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -678,16 +628,12 @@ const char* IMLoginReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .IM.User.Msg.IMLoginReq.HumanType type = 4 [default = Student];
+      // required int32 type = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _Internal::set_has_type(&has_bits);
+          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-          if (PROTOBUF_PREDICT_TRUE(::IM::User::Msg::IMLoginReq_HumanType_IsValid(val))) {
-            _internal_set_type(static_cast<::IM::User::Msg::IMLoginReq_HumanType>(val));
-          } else {
-            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(4, val, mutable_unknown_fields());
-          }
         } else goto handle_unusual;
         continue;
       default: {
@@ -734,11 +680,10 @@ failure:
         2, this->_internal_passwd(), target);
   }
 
-  // required .IM.User.Msg.IMLoginReq.HumanType type = 4 [default = Student];
+  // required int32 type = 4;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
-      4, this->_internal_type(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_type(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -768,9 +713,10 @@ size_t IMLoginReq::RequiredFieldsByteSizeFallback() const {
   }
 
   if (_internal_has_type()) {
-    // required .IM.User.Msg.IMLoginReq.HumanType type = 4 [default = Student];
+    // required int32 type = 4;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_type());
   }
 
   return total_size;
@@ -790,9 +736,10 @@ size_t IMLoginReq::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_id());
 
-    // required .IM.User.Msg.IMLoginReq.HumanType type = 4 [default = Student];
+    // required int32 type = 4;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_type());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
