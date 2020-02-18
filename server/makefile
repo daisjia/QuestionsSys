@@ -1,8 +1,8 @@
 INC += -I./
 LIB += -lpthread -lhiredis -lmysqlclient -lprotobuf
 OBJ_DIR = ./obj
-OBJ =  $(OBJ_DIR)/socket.o  $(OBJ_DIR)/sys.o $(OBJ_DIR)/main.o $(OBJ_DIR)/mytime.o $(OBJ_DIR)/mysql.o $(OBJ_DIR)/redis.o \
-	$(OBJ_DIR)/threadpoll.o $(OBJ_DIR)/IM.User.Msg.pb.o $(OBJ_DIR)/control.o $(OBJ_DIR)/pdu.o 
+OBJ =   $(OBJ_DIR)/sys.o $(OBJ_DIR)/main.o  $(OBJ_DIR)/mysql.o $(OBJ_DIR)/redis.o \
+	$(OBJ_DIR)/threadpoll.o $(OBJ_DIR)/IM.User.Msg.pb.o $(OBJ_DIR)/control.o $(OBJ_DIR)/pdu.o $(OBJ_DIR)/ser_socket.o 
 OBJ_EXT = .o
 CXX_EXT = .cpp
 CC_EXT = .cc

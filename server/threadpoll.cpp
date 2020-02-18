@@ -28,14 +28,17 @@ ThreadPoll::~ThreadPoll()
 
 bool ThreadPoll::AppandTask(int fd, std::string ReqMsg)
 {
+	LOGE("bool ThreadPoll::AppandTask(int fd, std::string ReqMsg)");
 	std::unique_lock<std::mutex> guard(_mtx);
 	_tasks.push_back(std::pair<int, std::string>(fd, ReqMsg));
 	_condition.notify_one();
+	LOGE("bool ThreadPoll::AppandTask(int fd, std::string ReqMsg)-->end");
 	return true;
 }
 
 void ThreadPoll::ThreadWork()
 {
+	LOGE("void ThreadPoll::ThreadWork()");
 	while (_running)
 	{
 		int fd;
@@ -63,12 +66,25 @@ void ThreadPoll::ThreadWork()
 
 		Task(fd, ReqMsg);
 	}
+	LOGE("void ThreadPoll::ThreadWork()-->end");
 }
 
 void ThreadPoll::Task(int fd, std::string ReqMsg)
 {
+	LOGE("void ThreadPoll::Task(int fd, std::string ReqMsg)");
 	__TIC1__(Task);
 	PDUHEAD* pReqHeader = (PDUHEAD*)ReqMsg.data();
-	_control->_model[pReqHeader->GetCmd()](fd, ReqMsg);
+	auto it = _control->_model.find(pReqHeader->GetCmd());
+	if (it == _control->_model.end())
+	{
+		LOGE("req cmd error!");
+		return;
+	}
+	int res = it->second(fd, ReqMsg);
+	if(!res)
+	{
+		LOGI("deal task fail!");
+	}
 	__TOC1__(Task);
+	LOGE("void ThreadPoll::Task(int fd, std::string ReqMsg)-->end");
 }

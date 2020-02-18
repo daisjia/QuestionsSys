@@ -11,6 +11,7 @@
 #include"mysql.h"
 #include"pdu.h"
 #include"log.h"
+#include"ser_socket.h"
 
 bool Register(int fd, std::string message);
 bool Login(int fd, std::string message);

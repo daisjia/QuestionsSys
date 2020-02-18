@@ -1,5 +1,6 @@
 #pragma once
 #include"control.h"
+#include"cli_socket.h"
 
 class Client
 {

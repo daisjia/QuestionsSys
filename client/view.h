@@ -13,32 +13,33 @@
 #include<map>
 #include"pdu.h"
 #include"log.h"
+#include"cli_socket.h"
 
 class View
 {
 public:
 	View() {}
 	virtual ~View() {};
-	virtual bool Process(int fd) = 0;
+	virtual bool Process() = 0;
 };
 
 class Register : public View
 {
 public:
 	Register() {};
-	bool Process(int fd);
+	bool Process();
 };
 
 class Login : public View
 {
 public:
 	Login() {};
-	bool Process(int fd);
+	bool Process();
 };
 
 class Exit : public View
 {
 public:
 	Exit() {};
-	bool Process(int fd);
+	bool Process();
 };

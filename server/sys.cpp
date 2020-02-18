@@ -4,25 +4,6 @@
 Sys* Sys::sys = NULL;
 std::mutex Sys::mux;
 
-void Sys::Recv(int fd, char* buff)
-{
-	while (true)
-	{
-		int n = recv(fd, buff, 1024 * 1024, 0);
-		if (n <= 0)
-		{
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-			{
-				break;
-			}
-			epoll_ctl(_epollfd, EPOLL_CTL_DEL, fd, NULL);
-			_cliInfo.erase(fd);
-			close(fd);
-			
-		}
-	}
-}
-
 void SetNonBlock(int fd)
 {
 	int old = fcntl(fd, F_GETFL);
@@ -32,20 +13,28 @@ void SetNonBlock(int fd)
 
 Sys::Sys(std::string ip, int port)
 {
-	_server.reset(new Socket(ip.c_str(), port));
+	int res = 0;
+	SerSocket* ser = SerSocket::GetSerSocket();
+	res = ser->Init(ip.c_str(), port);
+	if (res != SOCK_SUC)
+	{
+		std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
+		exit(0);
+	}
 	_threadPoll.reset(new ThreadPoll(5));
 	Redis::GetRedis();
-	Mysql::GetMysql();
+	MysqlPool *mysql = MysqlPool::GetMysqlPool();
+	mysql->SetConf("127.0.0.1", "root", "123456", "item", 5);
 	_epollfd = epoll_create(20);
 	if (_epollfd == -1)
 	{
 		LOGE("epollfd create fail!");
-		return;
+		exit(0);
 	}
 	struct epoll_event event;
 	event.events = EPOLLIN;
-	event.data.fd = _server->GetSerFd();
-	epoll_ctl(_epollfd, EPOLL_CTL_ADD, _server->GetSerFd(), &event);
+	event.data.fd = ser->GetSockFd();
+	epoll_ctl(_epollfd, EPOLL_CTL_ADD, ser->GetSockFd(), &event);
 }
 
 void Sys::Run()
@@ -63,10 +52,10 @@ void Sys::Run()
 		for (int i = 0; i < n; ++i)
 		{
 			int fd = events[i].data.fd;
-			if (fd == _server->GetSerFd())
+			if (fd == SerSocket::GetSerSocket()->GetSockFd())
 			{
 				struct sockaddr_in caddr;
-				int clifd = _server->Accept(_server->GetSerFd(),caddr);
+				int clifd = SerSocket::GetSerSocket()->Accept(caddr);
 				LOGI("ip: %s, port: %d connect success!", inet_ntoa(caddr.sin_addr), ntohs(caddr.sin_port));
 				if (clifd <= 0)
 				{
@@ -83,13 +72,18 @@ void Sys::Run()
 			{
 				epoll_ctl(_epollfd, EPOLL_CTL_DEL, fd, NULL);
 				close(fd);
-				_cliInfo.erase(fd);
 				LOGI("ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
+				_cliInfo.erase(fd);
 			}
 			else if (events[i].events & EPOLLIN)
 			{
 				char RspBuffer[1024 * 1024] = { 0 };
-				Recv(fd, RspBuffer);
+				int res = SerSocket::GetSerSocket()->RecvBuf(fd, RspBuffer, 1024 * 1024);
+				if (res != SOCK_SUC)
+				{
+					std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
+					continue;
+				}
 				PDUHEAD* pReqHeader = (PDUHEAD*)RspBuffer;
 				std::string ReqMsg(RspBuffer, pReqHeader->GetPackLen());
 				_threadPoll->AppandTask(fd, ReqMsg);

@@ -1,6 +1,6 @@
 #include "view.h"
 
-bool Register::Process(int fd)
+bool Register::Process()
 {
 	int id = 0;
 	std::string name;
@@ -35,17 +35,32 @@ bool Register::Process(int fd)
 	memcpy(ReqBuffer + pReqHeader.GetHeadLen(), ReqMsg.c_str(), ReqMsg.size());
 	((PDUHEAD*)ReqBuffer)->SetPackLen(pReqHeader.GetHeadLen() + ReqMsg.size());
 
-	send(fd, ReqBuffer, pReqHeader.GetHeadLen() + ReqMsg.size(), 0);
+	//send(fd, ReqBuffer, pReqHeader.GetHeadLen() + ReqMsg.size(), 0);
+	int res = CliSocket::GetCliSocket()->SendBuf(ReqBuffer, pReqHeader.GetHeadLen() + ReqMsg.size());
+	if (res != SOCK_SUC)
+	{
+		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
+		return false;
+	}
 
 	char RspBuffer[1024 * 1024] = { 0 };
-	recv(fd, RspBuffer, 1024 * 1024, 0);
+	//recv(fd, RspBuffer, 1024 * 1024, 0);
+	
+	int len;
+	res = CliSocket::GetCliSocket()->RecvBuf(RspBuffer, 1024 * 1024, len);
+	if (res != SOCK_SUC)
+	{
+		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
+		return false;
+	}
+
 	IM::User::Msg::IMRspMsg Msg2;
 	PDUHEAD* pRspHeader = (PDUHEAD*)RspBuffer;
 	std::string RspMsg = pRspHeader->GetBody();
 	Msg2.ParseFromString(RspMsg);
 	int ret = Msg2.ret();
 	std::string msg = Msg2.msg();
-	std::cout << "*********" << msg << "*********" << std::endl;
+	std::cout << "\033[34m------->SERVER: " << msg << "\033[0m" << std::endl;
 	if (ret == IM_OK)
 	{
 		return true;
@@ -56,7 +71,7 @@ bool Register::Process(int fd)
 	}
 }
 
-bool Login::Process(int fd)
+bool Login::Process()
 {
 	int id = 0;
 	std::string name;
@@ -88,17 +103,31 @@ bool Login::Process(int fd)
 	memcpy(ReqBuffer + pReqHeader.GetHeadLen(), ReqMsg.c_str(), ReqMsg.size());
 	((PDUHEAD*)ReqBuffer)->SetPackLen(pReqHeader.GetHeadLen() + ReqMsg.size());
 
-	send(fd, ReqBuffer, pReqHeader.GetHeadLen() + ReqMsg.size(), 0);
+	//send(fd, ReqBuffer, pReqHeader.GetHeadLen() + ReqMsg.size(), 0);
+	int res = CliSocket::GetCliSocket()->SendBuf(ReqBuffer, pReqHeader.GetHeadLen() + ReqMsg.size());
+	if (res != SOCK_SUC)
+	{
+		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
+		return false;
+	}
 
 	char RspBuffer[1024 * 1024] = { 0 };
-	recv(fd, RspBuffer, 1024 * 1024, 0);
+	//recv(fd, RspBuffer, 1024 * 1024, 0);
+	int len;
+	res = CliSocket::GetCliSocket()->RecvBuf(RspBuffer, 1024 * 1024, len);
+	if (res != SOCK_SUC)
+	{
+		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
+		return false;
+	}
+
 	IM::User::Msg::IMRspMsg Msg2;
 	PDUHEAD* pRspHeader = (PDUHEAD*)RspBuffer;
 	std::string RspMsg = pRspHeader->GetBody();
 	Msg2.ParseFromString(RspMsg);
 	int ret = Msg2.ret();
 	std::string msg = Msg2.msg();
-	std::cout << "*********" << msg << "*********" << std::endl;
+	std::cout << "\033[34m------->SERVER: " << msg << "\033[0m" << std::endl;
 	if (ret == IM_OK)
 	{
 		return true;
@@ -109,7 +138,7 @@ bool Login::Process(int fd)
 	}
 }
 
-bool Exit::Process(int fd)
+bool Exit::Process()
 {
 	exit(0);
 }

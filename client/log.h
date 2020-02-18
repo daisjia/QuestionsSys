@@ -20,7 +20,7 @@
 
 
 #if CONFIG_ERROR_LOG
-#define LOGE(fmt, ...) {char log_buff[1024]; snprintf(log_buff, 1024, fmt, ##__VA_ARGS__); std::cout<<"===Author: Daijia=== ERROR: "<<log_buff<<std::endl;}
+#define LOGE(fmt, ...) {char log_buff[1024]; snprintf(log_buff, 1024, fmt, ##__VA_ARGS__); std::cout<<"\033[31m===Author: Daijia=== ERROR: "<<log_buff<<"\033[0m"<<std::endl;}
 #else
 #define LOGE(fmt, ...)
 #endif

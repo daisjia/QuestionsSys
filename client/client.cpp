@@ -2,22 +2,13 @@
 
 Client::Client(std::string ip, const int port)
 {
-	_clifd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_clifd == -1)
+	CliSocket* cli = CliSocket::GetCliSocket();
+	cli->Init(ip.c_str(), port, true);
+	_clifd = cli->Connect();
+	if (_clifd <= 0)
 	{
-		LOGE("socket create fail!");
-		return;
-	}
-
-	struct sockaddr_in saddr;
-	saddr.sin_family = AF_INET;
-	saddr.sin_port = htons(port);
-	saddr.sin_addr.s_addr = inet_addr(ip.c_str());
-	int ret = connect(_clifd, (struct sockaddr*) & saddr, sizeof(saddr));
-	if (ret == -1)
-	{
-		LOGE("connect server fail!");
-		return;
+		std::cout << cli->GetErrMsg() << std::endl;
+		exit(0);
 	}
 	_remoteIp = ip;
 	_remotePort = port;
@@ -46,11 +37,11 @@ void Client::Run()
 
 		switch (choice)
 		{
-		case REGISTER: _control->_model[REGISTER]->Process(_clifd); 
+		case REGISTER: _control->_model[REGISTER]->Process();
 			break;
-		case LOGIN: if (_control->_model[LOGIN]->Process(_clifd)) { UserRun(); }
+		case LOGIN: if (_control->_model[LOGIN]->Process()) { UserRun(); }
 			break;
-		case EXIT: _control->_model[EXIT]->Process(_clifd);
+		case EXIT: _control->_model[EXIT]->Process();
 			break;
 		default:
 			std::cout << "===> input error!" << std::endl;
@@ -73,7 +64,7 @@ void Client::UserRun()
 			std::cout << "===> input error!" << std::endl;
 			continue;
 		}
-		it->second->Process(_clifd);
+		it->second->Process();
 	}
 }
 
@@ -81,9 +72,9 @@ void Client::Put()
 {
 	GetDateTime();
 	std::cout << std::endl;
-	std::cout << "-------------- Register : 1 --------------" << std::endl;
-	std::cout << "-------------- Login  :   2 --------------" << std::endl;
-	std::cout << "-------------- Exit   :   3 --------------" << std::endl;
+	std::cout << "\033[36m-------------- Register : 1 --------------\033[0m" << std::endl;
+	std::cout << "\033[36m-------------- Login  :   2 --------------\033[0m" << std::endl;
+	std::cout << "\033[36m-------------- Exit   :   3 --------------\033[0m" << std::endl;
 }
 
 void Client::UserPut()

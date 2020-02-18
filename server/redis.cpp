@@ -10,7 +10,7 @@ Redis::Redis()
 	{
 		redisFree(_redis);
 		LOGE("connect to reidsServer fail!");
-		return;
+		exit(0);
 	}
 	LOGI("connect to redisServer success!");
 }
