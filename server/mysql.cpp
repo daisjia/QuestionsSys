@@ -1,39 +1,4 @@
 #include "mysql.h"
-//Mysql * Mysql::mysql = NULL;
-//std::mutex Mysql::mux;
-
-//Mysql::Mysql()
-//{
-//	mpcon = mysql_init((MYSQL*)0);
-//	if (mpcon == NULL)
-//	{
-//		LOGE("mysql init fail!");
-//		exit(0);
-//	}
-//
-//	if (!mysql_real_connect(mpcon, "127.0.0.1", "root", "123456", NULL, 3306, NULL, 0))	//³É¹¦·µ»Ø0
-//	{
-//		LOGE("mysql connect error!");
-//		exit(0);
-//	}
-//
-//	if (mysql_select_db(mpcon, "item"))
-//	{
-//		LOGE("database select fail");
-//		exit(0);
-//	}
-//	LOGI("connect to mysqlServer success!")
-//}
-//
-//Mysql::~Mysql()
-//{
-//	if (NULL != mp_res)
-//	{
-//		mysql_free_result(mp_res);
-//	}
-//	mysql_close(mpcon);
-//}
-
 
 std::mutex MysqlPool::objectLock;
 std::mutex MysqlPool::poolLock;
@@ -45,14 +10,15 @@ void MysqlPool::SetConf(const char* host, const char* user, const char* passwd, 
 	_user = user;
 	_passwd = passwd;
 	_database = database;
-	_size = size;
+	_size = 0;
+
 	if (size > MAXSIZE || size <= 0)
 	{
 		LOGE("size error, create mysqlPool fail!");
 		exit(0);
 	}
 
-	int loop = _size;
+	int loop = size;
 	for (int i = 0; i < loop; ++i)
 	{
 		if (CreateOneConnect())
@@ -82,8 +48,13 @@ bool MysqlPool::Query(const char* sql, std::map<std::string, std::vector<std::st
 	MYSQL* mpcon = GetOneConnect();
 	if (mpcon == NULL)
 	{
-		LOGI("Get Mysql Connect fail, query fail!");
-		return false;
+		sleep(1);
+		mpcon = GetOneConnect();
+		if (mpcon == nullptr)
+		{
+			LOGI("Get Mysql Connect fail, query fail!");
+			return false;
+		}
 	}
 	if (mysql_query(mpcon, sql) == 0)
 	{
@@ -99,12 +70,13 @@ bool MysqlPool::Query(const char* sql, std::map<std::string, std::vector<std::st
 			while ((row = mysql_fetch_row(res)))
 			{
 				int i = 0;
-				for (auto it : result)
+				for (auto &it : result)
 				{
-					(it.second).push_back(row[i++]);
+					it.second.push_back(row[i++]);
 				}
 			}
 			mysql_free_result(res);
+			Close(mpcon);
 			return true;
 		}
 		else
@@ -112,14 +84,17 @@ bool MysqlPool::Query(const char* sql, std::map<std::string, std::vector<std::st
 			if (mysql_field_count(mpcon) != 0)
 			{
 				LOGI("mysql error: %s", mysql_errno(mpcon));
+				Close(mpcon);
 				return false;
 			}
+			Close(mpcon);
 			return true;
 		}
 	}
 	else
 	{
 		LOGI("sql error!");
+		Close(mpcon);
 		return false;
 	}
 }
@@ -130,14 +105,17 @@ bool MysqlPool::Insert(const char* sql)
 	if (mpcon == NULL)
 	{
 		LOGI("Get Mysql Connect fail, query fail!");
+		Close(mpcon);
 		return false;
 	}
 
 	if (mysql_query(mpcon, sql))
 	{
 		LOGI("mysql error: %s", mysql_errno(mpcon));
+		Close(mpcon);
 		return false;
 	}
+	Close(mpcon);
 	return true;
 }
 

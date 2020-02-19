@@ -8,34 +8,8 @@
 #include"log.h"
 #include<atomic>
 #include<map>
+#include<unistd.h>
 
-//class Mysql
-//{
-//public:
-//	static Mysql* GetMysql()
-//	{
-//		if (mysql == NULL)
-//		{
-//			mux.lock();
-//			if (mysql == NULL)
-//			{
-//				mysql = new Mysql();
-//			}
-//			mux.unlock();
-//		}
-//		return mysql;
-//	}
-//	~Mysql();
-//
-//	MYSQL* mpcon;	//数据库
-//	MYSQL_RES* mp_res;	//返回值
-//	MYSQL_ROW mp_row;	//每一行
-//	static Mysql* mysql;
-//private:
-//	
-//	static std::mutex mux;
-//	Mysql();
-//};
 
 #define MAXSIZE 10
 

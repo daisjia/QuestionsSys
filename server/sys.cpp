@@ -21,10 +21,11 @@ Sys::Sys(std::string ip, int port)
 		std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
 		exit(0);
 	}
-	_threadPoll.reset(new ThreadPoll(5));
-	Redis::GetRedis();
+	_threadPoll.reset(new ThreadPoll(4));
+	RedisPool* redis = RedisPool::GetRedisPool();
+	redis->SetConf(5);
 	MysqlPool *mysql = MysqlPool::GetMysqlPool();
-	mysql->SetConf("127.0.0.1", "root", "123456", "item", 5);
+	mysql->SetConf("127.0.0.1", "root", "123456", "item", 4);
 	_epollfd = epoll_create(20);
 	if (_epollfd == -1)
 	{

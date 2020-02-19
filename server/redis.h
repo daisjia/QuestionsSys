@@ -4,30 +4,49 @@
 #include"log.h"
 #include<string>
 #include<hiredis/hiredis.h>
+#include<iostream>
+#include<string>
 #include<mutex>
+#include<map>
+#include<atomic>
+#include<queue>
+#include<string.h>
+#include<unistd.h>
+#include<iostream>
 
-class Redis
+#define MAXSIZE 10
+
+class RedisPool
 {
 public:
-	static Redis* GetRedis()
+	static RedisPool* GetRedisPool()
 	{
 		if (redis == NULL)
 		{
-			mux.lock();
+			objectLock.lock();
 			if (redis == NULL)
 			{
-				redis = new Redis();
+				redis = new RedisPool();
 			}
-			mux.unlock();
+			objectLock.unlock();
 		}
 		return redis;
 	}
-	bool RedisCommand(const std::string command, redisReply* (&reply));
-public:
-	redisContext* _redis;
-	redisReply* _reply;
-	static Redis* redis;
-private: 
-	Redis();
-	static std::mutex mux;
+
+	void SetConf(int size = 4);
+	~RedisPool();
+	bool Query(const char* redisCmd, std::map<std::string, std::string>& result);
+	bool Insert(const char* redisCmd);
+private:
+	RedisPool();
+	bool CreateOneConnect();
+	redisContext* GetOneConnect();
+	void Close(redisContext* mpcon);
+
+private:
+	std::queue<redisContext *> _redisPool;
+	std::atomic_int _size;
+	static std::mutex objectLock;
+	static std::mutex poolLock;
+	static RedisPool* redis;
 };
