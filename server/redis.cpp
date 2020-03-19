@@ -19,11 +19,11 @@ void RedisPool::SetConf(int size)
 	{
 		if (CreateOneConnect())
 		{
-			std::cout << "----------------Redis id : " << i << "Create seccess!----------------" << std::endl;
+			std::cout << "----------------Redis id : " << i << " Create seccess!----------------" << std::endl;
 		}
 		else
 		{
-			std::cout << "----------------Redis id : " << i << "Create fail!----------------" << std::endl;
+			std::cout << "----------------Redis id : " << i << " Create fail!----------------" << std::endl;
 		}
 	}
 }

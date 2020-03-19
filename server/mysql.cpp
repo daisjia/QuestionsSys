@@ -23,11 +23,11 @@ void MysqlPool::SetConf(const char* host, const char* user, const char* passwd, 
 	{
 		if (CreateOneConnect())
 		{
-			std::cout << "----------------Mysql id : "<<i<< "Create seccess!----------------" << std::endl;
+			std::cout << "----------------Mysql id : "<<i<< " Create seccess!----------------" << std::endl;
 		}
 		else
 		{
-			std::cout << "----------------Mysql id : " << i << "Create fail!----------------" << std::endl;
+			std::cout << "----------------Mysql id : " << i << " Create fail!----------------" << std::endl;
 		}
 	}
 }

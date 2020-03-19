@@ -39,7 +39,7 @@ void Client::Run()
 		{
 		case REGISTER: _control->_model[REGISTER]->Process();
 			break;
-		case LOGIN: if (_control->_model[LOGIN]->Process()) { UserRun(); }
+		case LOGIN: DealLogin();
 			break;
 		case EXIT: _control->_model[EXIT]->Process();
 			break;
@@ -50,23 +50,58 @@ void Client::Run()
 	}
 }
 
-void Client::UserRun()
+void Client::StudentRun()
 {
-	int choice = 0;
+	int choice;
 	while (true)
 	{
-		UserPut();
+		StudentPut();
 		std::cout << "---> please input choice: ";
 		std::cin >> choice;
-		auto it = _control->_model.find(choice);
-		if (it == _control->_model.end())
+		if (choice == 1)
+		{
+			_control->_model[SELECT]->Process();
+		}
+		else if (choice == 2)
+		{
+			return;
+		}
+		else
 		{
 			std::cout << "===> input error!" << std::endl;
 			continue;
 		}
-		it->second->Process();
 	}
 }
+
+void Client::TeacherRun()
+{
+	int choice;
+	while (true)
+	{
+		AdminPut();
+		std::cout << "---> please input choice: ";
+		std::cin >> choice;
+		if (choice == 1)
+		{
+			_control->_model[GETALL]->Process();
+		}
+		else if (choice == 2)
+		{
+			_control->_model[INSERT]->Process();
+		}
+		else if (choice == 3)
+		{
+			_control->_model[DELETE]->Process();
+		}
+		else
+		{
+			std::cout << "===> input error!" << std::endl;
+			continue;
+		}
+	}
+}
+
 
 void Client::Put()
 {
@@ -77,12 +112,40 @@ void Client::Put()
 	std::cout << "\033[36m-------------- Exit   :   3 --------------\033[0m" << std::endl;
 }
 
-void Client::UserPut()
+void Client::StudentPut()
 {
 	GetDateTime();
-	std::cout << "------------------UserPut---------------------" << std::endl;
 	std::cout << std::endl;
-	std::cout << "-------------- Register : 1 --------------" << std::endl;
-	std::cout << "-------------- Login  :   2 --------------" << std::endl;
-	std::cout << "-------------- Exit   :   3 --------------" << std::endl;
+	std::cout << "\033[36m-----------------STUDENT------------------\033[0m" << std::endl;
+	std::cout << "\033[36m--------------   抽题 : 1   --------------\033[0m" << std::endl;
+	std::cout << "\033[36m--------------   退出 : 2   --------------\033[0m" << std::endl;
+}
+
+void Client::AdminPut()
+{
+	GetDateTime();
+	std::cout << std::endl;
+	std::cout << "\033[36m--------------------ADMIN-------------------\033[0m" << std::endl;
+	std::cout << "\033[36m--------------   查看题库 : 1 --------------\033[0m" << std::endl;
+	std::cout << "\033[36m--------------   插入题目 : 2 --------------\033[0m" << std::endl;
+	std::cout << "\033[36m--------------   删除题目 : 3 --------------\033[0m" << std::endl;
+	std::cout << "\033[36m--------------    退出 : 4    --------------\033[0m" << std::endl;
+}
+
+void Client::DealLogin()
+{
+	int ret = _control->_model[LOGIN]->Process();
+	if (ret == IM_FALSE)
+	{
+		return;
+	}
+
+	if(ret == STUDENT)
+	{
+		StudentRun();
+	}
+	else if(ret == ADMIN)
+	{
+		TeacherRun();
+	}
 }

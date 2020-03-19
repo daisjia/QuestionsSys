@@ -21,7 +21,7 @@ Sys::Sys(std::string ip, int port)
 		std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
 		exit(0);
 	}
-	_threadPoll.reset(new ThreadPoll(4));
+	_threadPoll.reset(new ThreadPoll(5));
 	RedisPool* redis = RedisPool::GetRedisPool();
 	redis->SetConf(5);
 	MysqlPool *mysql = MysqlPool::GetMysqlPool();

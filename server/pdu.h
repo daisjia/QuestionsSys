@@ -6,12 +6,20 @@
 
 #define REGISTER 1
 #define LOGIN 2
+#define EXIT 3
+#define GETALL 4
+#define SELECT 5
+#define INSERT 5
+#define DELETE 6
 
 #define IM_OK 1
 #define IM_ERROR -1
 
 #define STUDENT 0
 #define ADMIN 1
+
+#define IM_TRUE 1
+#define IM_FALSE 0
 
 
 typedef struct PDUHEADtag

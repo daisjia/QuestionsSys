@@ -1,6 +1,6 @@
 #include "view.h"
 
-bool Register::Process()
+int Register::Process()
 {
 	int id = 0;
 	std::string name;
@@ -18,7 +18,7 @@ bool Register::Process()
 	if (type != STUDENT && type != ADMIN)
 	{
 		std::cout << "===> type error!" << std::endl;
-		return false;
+		return IM_FALSE;
 	}
 
 	PDUHEAD pReqHeader;
@@ -40,7 +40,7 @@ bool Register::Process()
 	if (res != SOCK_SUC)
 	{
 		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
-		return false;
+		return IM_FALSE;
 	}
 
 	char RspBuffer[1024 * 1024] = { 0 };
@@ -51,7 +51,7 @@ bool Register::Process()
 	if (res != SOCK_SUC)
 	{
 		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
-		return false;
+		return IM_FALSE;
 	}
 
 	IM::User::Msg::IMRspMsg Msg2;
@@ -63,15 +63,15 @@ bool Register::Process()
 	std::cout << "\033[34m------->SERVER: " << msg << "\033[0m" << std::endl;
 	if (ret == IM_OK)
 	{
-		return true;
+		return IM_TRUE;
 	}
 	else
 	{
-		return false;
+		return IM_FALSE;
 	}
 }
 
-bool Login::Process()
+int Login::Process()
 {
 	int id = 0;
 	std::string name;
@@ -87,7 +87,7 @@ bool Login::Process()
 	if (type != STUDENT && type != ADMIN)
 	{
 		std::cout << "===> type error!" << std::endl;
-		return false;
+		return IM_FALSE;
 	}
 
 	PDUHEAD pReqHeader;
@@ -108,7 +108,7 @@ bool Login::Process()
 	if (res != SOCK_SUC)
 	{
 		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
-		return false;
+		return IM_FALSE;
 	}
 
 	char RspBuffer[1024 * 1024] = { 0 };
@@ -118,7 +118,7 @@ bool Login::Process()
 	if (res != SOCK_SUC)
 	{
 		std::cout << CliSocket::GetCliSocket()->GetErrMsg() << std::endl;
-		return false;
+		return IM_FALSE;
 	}
 
 	IM::User::Msg::IMRspMsg Msg2;
@@ -130,15 +130,42 @@ bool Login::Process()
 	std::cout << "\033[34m------->SERVER: " << msg << "\033[0m" << std::endl;
 	if (ret == IM_OK)
 	{
-		return true;
+		if (type == ADMIN)
+		{
+			return ADMIN;
+		}
+		else if (type == STUDENT)
+		{
+			return STUDENT;
+		}
 	}
 	else
 	{
-		return false;
+		return IM_FALSE;
 	}
 }
 
-bool Exit::Process()
+int Exit::Process()
 {
 	exit(0);
+}
+
+int SelectQues::Process()
+{
+	
+}
+
+int InsertQues::Process()
+{
+	return 0;
+}
+
+int GetAllQues::Process()
+{
+	return 0;
+}
+
+int DelQues::Process()
+{
+	return 0;
 }

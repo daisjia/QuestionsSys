@@ -20,26 +20,55 @@ class View
 public:
 	View() {}
 	virtual ~View() {};
-	virtual bool Process() = 0;
+	virtual int Process() = 0;
 };
 
 class Register : public View
 {
 public:
 	Register() {};
-	bool Process();
+	int Process();
 };
 
 class Login : public View
 {
 public:
 	Login() {};
-	bool Process();
+	int Process();
 };
+
+class SelectQues : public View
+{
+public:
+	SelectQues() {};
+	int Process();
+};
+
+class InsertQues : public View
+{
+public:
+	InsertQues() {};
+	int Process();
+};
+
+class DelQues : public View
+{
+public:
+	DelQues() {};
+	int Process();
+};
+
+class GetAllQues : public View
+{
+public:
+	GetAllQues() {};
+	int Process();
+};
+
 
 class Exit : public View
 {
 public:
 	Exit() {};
-	bool Process();
+	int Process();
 };

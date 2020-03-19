@@ -42,6 +42,8 @@ bool Register(int fd, std::string ReqMsg)
 	std::string name = user.name();
 	std::string passwd = user.passwd();
 	int type = user.type();
+
+	std::cout<<"id: "<<id<<" name: "<<name<<" passwd: "<<passwd<<" type"<<type<<std::endl;
 	LOGE("---id: %d, name: %s, passwd: %s, type: %d", id, name.c_str(), passwd.c_str(), type);
 	char redisCmd[100] = { 0 };
 	sprintf(redisCmd, "hgetall user:id:%d", id);

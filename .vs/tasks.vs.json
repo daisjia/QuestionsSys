@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "任务-graduation_project",
+      "appliesTo": "/",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "任务-CppProperties",
+      "appliesTo": "CppProperties.json",
+      "type": "launch"
+    }
+  ]
+}

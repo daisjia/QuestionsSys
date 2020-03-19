@@ -2,7 +2,7 @@
 
 static PDUHEAD h;
 static int PDU_HEAD_SIZE = h.GetHeadLen();
-SerSocket *SerSocket::ser = NULL;
+SerSocket* SerSocket::ser = NULL;
 std::mutex SerSocket::lck;
 
 SerSocket::SerSocket()
@@ -83,12 +83,12 @@ void SerSocket::GetHost(std::string& ip, int& port)
 	port = _hostPort;
 }
 
-int SerSocket::Accept(sockaddr_in &caddr)
+int SerSocket::Accept(sockaddr_in& caddr)
 {
 	CHECK_HOSP();
 
 	socklen_t len = 0;
-	int fd = accept(_sockfd, (struct sockaddr*) &caddr, &len);
+	int fd = accept(_sockfd, (struct sockaddr*) & caddr, &len);
 	if (fd <= 0)
 	{
 		//客户端在accept之前关闭连接，作为忽略
@@ -100,7 +100,7 @@ int SerSocket::Accept(sockaddr_in &caddr)
 	return fd;
 }
 
-int SerSocket::SendBuf(int fd, char *message, int len)
+int SerSocket::SendBuf(int fd, char* message, int len)
 {
 	CHECK_ALL();
 	_errStr[0] = '\0';
@@ -148,7 +148,7 @@ int SerSocket::SendBuf(int fd, char *message, int len)
 	return SOCK_SUC;
 }
 
-int SerSocket::RecvBuf(int fd, char * buff, int needlen)
+int SerSocket::RecvBuf(int fd, char* buff, int needlen)
 {
 	//char buff[1024 * 1024]{ 0 };
 	CHECK_ALL();
