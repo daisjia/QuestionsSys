@@ -4,6 +4,9 @@
 Sys* Sys::sys = NULL;
 std::mutex Sys::mux;
 
+int _epollfd;
+std::map<int, struct sockaddr_in> _cliInfo;
+
 void SetNonBlock(int fd)
 {
 	int old = fcntl(fd, F_GETFL);
@@ -11,31 +14,89 @@ void SetNonBlock(int fd)
 	fcntl(fd, F_SETFL, _new);
 }
 
-Sys::Sys(std::string ip, int port)
+void HeartRate(int fd)
+{
+	while (true)
+	{
+		char Buffer[5] = { 0 };
+		recv(fd, (void*)Buffer, 5, 0);
+		send(fd, (void*)"PONG", 5, 0);
+	}
+}
+
+Sys::~Sys()
+{
+	_threadPoll.reset();
+	for (auto& it : t)
+		it.join();
+
+	_cliInfo.clear();
+}
+
+Sys::Sys()
 {
 	int res = 0;
+	sockaddr_in saddr;
+	saddr.sin_family = AF_INET;
+	saddr.sin_port = htons(5000); //负载均衡服务器套接字为5000
+	saddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	balancefd = socket(AF_INET, SOCK_STREAM, 0);
+	if (balancefd <= 0)
+	{
+		LOGI("server start fail, balancefd <= 0 !");
+		exit(0);
+	}
+	socklen_t len;
+	res = connect(balancefd, (struct sockaddr*) & saddr, sizeof(saddr));
+	if (res == -1)
+	{
+		LOGI("server start fail, connect fail!");
+		exit(0);
+	}
+
+	int port = 0;
+	res = recv(balancefd, (void*)&port, 4, 0);
+	if (res <= 0)
+	{
+		LOGI("server start fail, recv <= 0!");
+		exit(0);
+	}
+
+	if (port < 5002)
+	{
+		LOGI("server start fail, port < 5002!");
+		exit(0);
+	}
+
 	SerSocket* ser = SerSocket::GetSerSocket();
-	res = ser->Init(ip.c_str(), port);
+	res = ser->Init("127.0.0.1", port);
 	if (res != SOCK_SUC)
 	{
 		std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
 		exit(0);
 	}
 	_threadPoll.reset(new ThreadPoll(5));
+
+	std::cout << std::endl;
+	MysqlPool* mysql = MysqlPool::GetMysqlPool();
+	mysql->SetConf("127.0.0.1", "root", "123456", "item", 5);
+
+	std::cout << std::endl;
 	RedisPool* redis = RedisPool::GetRedisPool();
 	redis->SetConf(5);
-	MysqlPool *mysql = MysqlPool::GetMysqlPool();
-	mysql->SetConf("127.0.0.1", "root", "123456", "item", 4);
+
 	_epollfd = epoll_create(20);
 	if (_epollfd == -1)
 	{
 		LOGE("epollfd create fail!");
 		exit(0);
 	}
-	struct epoll_event event;
+	struct epoll_event event, event1;
 	event.events = EPOLLIN;
 	event.data.fd = ser->GetSockFd();
 	epoll_ctl(_epollfd, EPOLL_CTL_ADD, ser->GetSockFd(), &event);
+
+	t.push_back(std::thread(HeartRate, balancefd));
 }
 
 void Sys::Run()
@@ -82,6 +143,10 @@ void Sys::Run()
 				int res = SerSocket::GetSerSocket()->RecvBuf(fd, RspBuffer, 1024 * 1024);
 				if (res != SOCK_SUC)
 				{
+					epoll_ctl(_epollfd, EPOLL_CTL_DEL, fd, NULL);
+					close(fd);
+					LOGI("ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
+					_cliInfo.erase(fd);
 					std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
 					continue;
 				}

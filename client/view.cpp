@@ -8,6 +8,18 @@ int Register::Process()
 	int type;
 	std::cout << "---> please input id: ";
 	std::cin >> id;
+	while(std::cin.fail())
+	{
+		std::string str;
+		std::cin.clear();
+		std::cin >> str;
+		std::cin.ignore();
+		
+		std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+		std::cout << "please again input id: ";
+		std::cin >> id;
+	}
+
 	std::cout << "---> please input name: ";
 	std::cin >> name;
 	std::cout << "---> please input passwd: ";
@@ -15,9 +27,20 @@ int Register::Process()
 	std::cout << "---> type: student 0 && admin 1 "<<std::endl;
 	std::cout << "---> please input type: ";
 	std::cin >> type;
+	while (std::cin.fail())
+	{
+		std::string str;
+		std::cin.clear();
+		std::cin >> str;
+		std::cin.ignore();
+		std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+		std::cout << "please again input type: ";
+		std::cin >> type;
+	}
+
 	if (type != STUDENT && type != ADMIN)
 	{
-		std::cout << "===> type error!" << std::endl;
+		std::cout << "\033[31m===> type error!\033[0m" << std::endl;
 		return IM_FALSE;
 	}
 
@@ -79,14 +102,35 @@ int Login::Process()
 	int type;
 	std::cout << "---> please input id: ";
 	std::cin >> id;
+	while (std::cin.fail())
+	{
+		std::string str;
+		std::cin.clear();
+		std::cin >> str;
+		std::cin.ignore();
+		std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+		std::cout << "please again input id: ";
+		std::cin >> id;
+	}
+
 	std::cout << "---> please input passwd: ";
 	std::cin >> passwd;
 	std::cout << "---> type: student 0 && admin 1 " << std::endl;
 	std::cout << "---> please input type: ";
 	std::cin >> type;
+	while (std::cin.fail())
+	{
+		std::string str;
+		std::cin.clear();
+		std::cin >> str;
+		std::cin.ignore();
+		std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+		std::cout << "please again input type: ";
+		std::cin >> type;
+	}
 	if (type != STUDENT && type != ADMIN)
 	{
-		std::cout << "===> type error!" << std::endl;
+		std::cout << "\033[31m===> type error!\033[0m" << std::endl;
 		return IM_FALSE;
 	}
 

@@ -1,7 +1,46 @@
 #include "client.h"
 
-Client::Client(std::string ip, const int port)
+Client::Client()
 {
+	int fd = socket(AF_INET, SOCK_STREAM, 0);
+	sockaddr_in saddr;
+	saddr.sin_family = AF_INET;
+	saddr.sin_port = htons(5001);
+	saddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	int res = connect(fd, (struct sockaddr*) & saddr, sizeof(saddr));
+	if (res == -1)
+	{
+		close(fd);
+		LOGI("client start fail, connect == -1 !");
+		exit(0);
+	}
+	char RspBuffer[1024] = { 0 };
+	Json::Value val;
+	Json::Reader reader;
+	res = recv(fd, RspBuffer, 1024, 0);
+	if (res <= 0)
+	{
+		close(fd);
+		LOGI("client start fail, recv <= 0 !");
+		exit(0);
+	}
+
+	if (reader.parse(RspBuffer, val) == -1)
+	{
+		close(fd);
+		LOGI("client start fail, json parse fail!");
+		exit(0);
+	}
+
+	std::string ip = val["ip"].asString();
+	int port = val["port"].asInt();
+	if (port < 5002)
+	{
+		close(fd);
+		LOGI("client start fail, port < 5002");
+		exit(0);
+	}
+	close(fd);
 	CliSocket* cli = CliSocket::GetCliSocket();
 	cli->Init(ip.c_str(), port, true);
 	_clifd = cli->Connect();
@@ -32,9 +71,19 @@ void Client::Run()
 	while (true)
 	{
 		Put();
+		choice = 0;
 		std::cout << "---> please input choice: ";
 		std::cin >> choice;
-
+		if(std::cin.fail())
+		{
+			std::string str;
+			std::cin.clear();
+			std::cin >> str;
+			std::cin.ignore();
+			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			continue;
+		}
+		
 		switch (choice)
 		{
 		case REGISTER: _control->_model[REGISTER]->Process();
@@ -44,7 +93,7 @@ void Client::Run()
 		case EXIT: _control->_model[EXIT]->Process();
 			break;
 		default:
-			std::cout << "===> input error!" << std::endl;
+			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
 			break;
 		}
 	}
@@ -58,6 +107,16 @@ void Client::StudentRun()
 		StudentPut();
 		std::cout << "---> please input choice: ";
 		std::cin >> choice;
+		if (std::cin.fail())
+		{
+			std::string str;
+			std::cin.clear();
+			std::cin >> str;
+			std::cin.ignore();
+			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			continue;
+		}
+
 		if (choice == 1)
 		{
 			_control->_model[SELECT]->Process();
@@ -68,7 +127,7 @@ void Client::StudentRun()
 		}
 		else
 		{
-			std::cout << "===> input error!" << std::endl;
+			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
 			continue;
 		}
 	}
@@ -82,6 +141,16 @@ void Client::TeacherRun()
 		AdminPut();
 		std::cout << "---> please input choice: ";
 		std::cin >> choice;
+		if (std::cin.fail())
+		{
+			std::string str;
+			std::cin.clear();
+			std::cin >> str;
+			std::cin.ignore();
+			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			continue;
+		}
+
 		if (choice == 1)
 		{
 			_control->_model[GETALL]->Process();
@@ -96,7 +165,7 @@ void Client::TeacherRun()
 		}
 		else
 		{
-			std::cout << "===> input error!" << std::endl;
+			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
 			continue;
 		}
 	}

@@ -129,7 +129,6 @@ int SerSocket::SendBuf(int fd, char* message, int len)
 			snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d error\n",
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
-			Close();
 			return ERROR_SEND;
 		}
 		left -= ret;
@@ -142,7 +141,6 @@ int SerSocket::SendBuf(int fd, char* message, int len)
 		snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d error\n",
 			__FILE__, __LINE__,
 			_hostIp.c_str(), _hostPort, loop, len);
-		Close();
 		return ERROR_SEND;
 	}
 	return SOCK_SUC;
@@ -162,7 +160,6 @@ int SerSocket::RecvBuf(int fd, char* buff, int needlen)
 			snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d error\n",
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
-			Close();
 			return ERROR_RECV;
 		}
 
@@ -171,7 +168,6 @@ int SerSocket::RecvBuf(int fd, char* buff, int needlen)
 			snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d error\n",
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
-			Close();
 			return ERROR_RECV;
 		}
 
@@ -186,7 +182,6 @@ int SerSocket::RecvBuf(int fd, char* buff, int needlen)
 			snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d error\n",
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
-			Close();
 			return ERROR_RECV;
 		}
 		if (ret == 0)
@@ -194,7 +189,6 @@ int SerSocket::RecvBuf(int fd, char* buff, int needlen)
 			snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d client close\n",
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
-			Close();
 			return ERROR_RECV;
 		}
 		len += ret;
@@ -205,7 +199,6 @@ int SerSocket::RecvBuf(int fd, char* buff, int needlen)
 			snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d server close\n",
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
-			Close();
 			return ERROR_RECV;
 		}
 
@@ -219,7 +212,6 @@ int SerSocket::RecvBuf(int fd, char* buff, int needlen)
 	snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d error\n",
 		__FILE__, __LINE__,
 		_hostIp.c_str(), _hostPort, loop, len);
-	Close();
 	return ERROR_RECV;
 }
 

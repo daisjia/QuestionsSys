@@ -11,14 +11,14 @@
 class Sys
 {
 public:
-	static Sys* GetSys(std::string ip, int port)
+	static Sys* GetSys()
 	{
 		if (sys == NULL)
 		{
 			mux.lock();
 			if (sys == NULL)
 			{
-				sys = new Sys(ip, port);
+				sys = new Sys();
 			}
 			mux.unlock();
 		}
@@ -27,10 +27,16 @@ public:
 
 	void Run();	
 	static Sys* sys;
+
+	~Sys();
 private:
-	Sys(std::string ip, int port);
+	Sys();
 	std::unique_ptr<ThreadPoll> _threadPoll;
-	int _epollfd;
-	std::map<int, struct sockaddr_in> _cliInfo;
+	//int _epollfd;
+	//std::map<int, struct sockaddr_in> _cliInfo;
+	
 	static std::mutex mux;
+	int balancefd;  //和负载均衡连接的套接字
+
+	std::vector<std::thread> t;
 };

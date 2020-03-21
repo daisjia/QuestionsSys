@@ -1,7 +1,7 @@
 INC += -I./
-LIB += -lpthread -lprotobuf
+LIB += -lpthread -lprotobuf -ljson
 OBJ_DIR = ./obj
-OBJ =  $(OBJ_DIR)/IM.User.Msg.pb.o $(OBJ_DIR)/main.o  $(OBJ_DIR)/pdu.o $(OBJ_DIR)/view.o $(OBJ_DIR)/client.o $(OBJ_DIR)/control.o $(OBJ_DIR)/cli_socket.o
+OBJ =  $(OBJ_DIR)/IM.User.Msg.pb.o $(OBJ_DIR)/main.o  $(OBJ_DIR)/pdu.o $(OBJ_DIR)/view.o $(OBJ_DIR)/client.o $(OBJ_DIR)/control.o $(OBJ_DIR)/cli_socket.o 
 OBJ_EXT = .o
 CXX_EXT = .cpp
 CC_EXT = .cc

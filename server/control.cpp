@@ -1,5 +1,7 @@
 #include "control.h"
 
+extern int _epollfd;
+extern std::map<int, struct sockaddr_in> _cliInfo;
 
 void SendResult(int fd, int cmd, int ret,std::string ReqMsg)
 {
@@ -17,6 +19,10 @@ void SendResult(int fd, int cmd, int ret,std::string ReqMsg)
 	int res = SerSocket::GetSerSocket()->SendBuf(fd, RspBuffer, pReqHeader.GetHeadLen() + RspMsg.size());
 	if (res != SOCK_SUC)
 	{
+		epoll_ctl(_epollfd, EPOLL_CTL_DEL, fd, NULL);
+		close(fd);
+		LOGI("***************ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
+		_cliInfo.erase(fd);
 		std::cout<<SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
 	}
 }

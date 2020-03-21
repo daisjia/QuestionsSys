@@ -1,11 +1,12 @@
 #pragma once
 #include"control.h"
 #include"cli_socket.h"
+#include<json/json.h>
 
 class Client
 {
 public:
-	Client(std::string ip, const int port);
+	Client();
 	std::string GetRemoteIp();
 	int GetRemotePort();
 	void Run();
