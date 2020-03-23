@@ -7,16 +7,23 @@
 #define REGISTER 1
 #define LOGIN 2
 #define EXIT 3
-#define GETALL 4
-#define SELECT 5
-#define INSERT 5
-#define DELETE 6
+#define GETALL 4	//获得所有试题
+#define SELECT 5	//抽题
+#define INSERT 6	//插入
+#define DELETE 7	//删除
+
+//试题类型
+#define STRING 31
+#define LIST 32
+#define STACK 33
+#define QUEUE 34
+#define TREE 35
 
 #define IM_OK 1
 #define IM_ERROR -1
 
-#define STUDENT 0
-#define ADMIN 1
+#define STUDENT 1
+#define ADMIN 2
 
 #define IM_TRUE 1
 #define IM_FALSE 0

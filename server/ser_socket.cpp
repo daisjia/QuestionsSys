@@ -87,7 +87,7 @@ int SerSocket::Accept(sockaddr_in& caddr)
 {
 	CHECK_HOSP();
 
-	socklen_t len = 0;
+	socklen_t len = sizeof(caddr);
 	int fd = accept(_sockfd, (struct sockaddr*) & caddr, &len);
 	if (fd <= 0)
 	{
@@ -110,13 +110,13 @@ int SerSocket::SendBuf(int fd, char* message, int len)
 	int loop = 1000;
 	for (int i = 0; i < loop; ++i)
 	{
-		/*if (CheckWrite(_sockfd) <= 0)
+	/*	if (CheckWrite(_sockfd) <= 0)
 		{
 			snprintf(_errStr, 512, "[%s][%d]recv ip:%s port:%d loop:%d buf-len:%d error\n",
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
 			Close();
-			return ENUM_SOCKRSP_ERR_SEND;
+			return ERROR_SEND;
 		}*/
 
 		int ret = send(fd, message + nsend, left, 0);

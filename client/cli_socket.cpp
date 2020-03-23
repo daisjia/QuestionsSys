@@ -260,7 +260,7 @@ int CliSocket::RecvBuf(char * buff, int needlen, int& recvlen)
 				__FILE__, __LINE__,
 				_hostIp.c_str(), _hostPort, loop, len);
 			Close();
-			exit(0);
+			return ERROR_RECV;
 		}
 		len += ret;
 		ret = _func(buff, len);

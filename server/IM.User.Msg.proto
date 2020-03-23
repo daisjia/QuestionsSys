@@ -19,6 +19,19 @@ message IMLoginReq
 message IMRspMsg
 {
 	required int32 ret = 1;
-	required string msg = 2;
+	//required string msg = 2;
+	required bytes msg = 2;
 }
 
+message IMQuestionMsg
+{
+	required int32 num = 1;
+	required bytes msg = 2;
+}
+
+message IMInsertMsg
+{
+	required int32 degree = 1; //难度洗漱
+	required int32 type = 2; //试题类型
+	required bytes msg = 3; //试题内容
+}

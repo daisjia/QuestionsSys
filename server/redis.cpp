@@ -146,7 +146,7 @@ bool RedisPool::Insert(const char* redisCmd)
 	}
 	freeReplyObject(reply);
 	Close(r);
-	return false;
+	return true;
 }
 
 RedisPool::RedisPool()

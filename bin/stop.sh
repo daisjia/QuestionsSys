@@ -12,3 +12,4 @@ do
 done < a
 
 rm -rf a
+ps -ef | grep main

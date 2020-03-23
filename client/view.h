@@ -64,11 +64,3 @@ public:
 	GetAllQues() {};
 	int Process();
 };
-
-
-class Exit : public View
-{
-public:
-	Exit() {};
-	int Process();
-};

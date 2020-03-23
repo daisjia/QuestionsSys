@@ -423,3 +423,146 @@ id: 456 name: 1 passwd: 1 type0
 == Author: Daijia = 2020-03-21 18:37:32 == ip: 127.0.0.1, port: 5000 connect success!
 ----------------Thread id: < 140490429155072 > Dealing...----------------
 == Author: Daijia = 2020-03-21 18:37:39 == ip: 127.0.0.1, port: 5000 exit!
+----------------Thread id: < 140021520680704 > Running...----------------
+----------------Thread id: < 140021512288000 > Running...----------------
+----------------Thread id: < 140021503895296 > Running...----------------
+----------------Thread id: < 140021495502592 > Running...----------------
+----------------Thread id: < 140021487109888 > Running...----------------
+
+----------------Mysql id : 0 Create seccess!----------------
+----------------Mysql id : 1 Create seccess!----------------
+----------------Mysql id : 2 Create seccess!----------------
+----------------Mysql id : 3 Create seccess!----------------
+----------------Mysql id : 4 Create seccess!----------------
+
+----------------Redis id : 0 Create seccess!----------------
+----------------Redis id : 1 Create seccess!----------------
+----------------Redis id : 2 Create seccess!----------------
+----------------Redis id : 3 Create seccess!----------------
+----------------Redis id : 4 Create seccess!----------------
+== Author: Daijia = 2020-03-22 14:46:23 == client ip: 0.0.0.0, port: 0 connect success!
+----------------Thread id: < 140021520680704 > Dealing...----------------
+[Register]--> id: 11 name: 11 passwd: 11 type: 0
+----------------Thread id: < 140021512288000 > Dealing...----------------
+[Login]--> id: 11 passwd: 11 type: 0
+----------------Thread id: < 140021503895296 > Dealing...----------------
+[Register]--> id: 11 name: 11 passwd: 11 type: 1
+----------------Thread id: < 140021495502592 > Dealing...----------------
+[Login]--> id: 11 passwd: 11 type: 1
+== Author: Daijia = 2020-03-22 14:47:27 == client ip: 0.0.0.0, port: 0 exit!
+== Author: Daijia = 2020-03-22 14:47:29 == client ip: 0.0.0.0, port: 0 connect success!
+----------------Thread id: < 140021487109888 > Dealing...----------------
+[Login]--> id: 11 passwd: 11 type: 1
+----------------Thread id: < 140021520680704 > Dealing...----------------
+[Register]--> id: 44 name: 44 passwd: 44 type: 1
+----------------Thread id: < 140021512288000 > Dealing...----------------
+[Login]--> id: 44 passwd: 44 type: 1
+== Author: Daijia = 2020-03-22 15:02:25 == client ip: 0.0.0.0, port: 0 exit!
+== Author: Daijia = 2020-03-22 15:02:34 == client ip: 0.0.0.0, port: 0 connect success!
+== Author: Daijia = 2020-03-22 15:04:14 == client ip: 0.0.0.0, port: 0 exit!
+== Author: Daijia = 2020-03-22 15:04:18 == client ip: 0.0.0.0, port: 0 connect success!
+== Author: Daijia = 2020-03-22 15:04:26 == client ip: 0.0.0.0, port: 0 exit!
+== Author: Daijia = 2020-03-22 15:06:20 == client ip: 0.0.0.0, port: 0 connect success!
+== Author: Daijia = 2020-03-22 15:07:20 == client ip: 0.0.0.0, port: 0 exit!
+== Author: Daijia = 2020-03-22 15:07:25 == client ip: 0.0.0.0, port: 0 connect success!
+----------------Thread id: < 140021503895296 > Dealing...----------------
+[Register]--> id: 0 name: 00 passwd:  type: 0
+----------------Thread id: < 140021495502592 > Dealing...----------------
+[Login]--> id: 0 passwd:  type: 0
+----------------Thread id: < 140021487109888 > Dealing...----------------
+[Register]--> id: 0 name: 000 passwd:  type: 0
+----------------Thread id: < 140021520680704 > Dealing...----------------
+[Login]--> id: 0 passwd:  type: 0
+== Author: Daijia = 2020-03-22 15:09:07 == client ip: 0.0.0.0, port: 0 exit!
+== Author: Daijia = 2020-03-22 15:09:12 == client ip: 0.0.0.0, port: 0 connect success!
+== Author: Daijia = 2020-03-22 15:09:26 == client ip: 0.0.0.0, port: 0 exit!
+== Author: Daijia = 2020-03-22 15:18:51 == client ip: 0.0.0.0, port: 0 connect success!
+----------------Thread id: < 140021512288000 > Dealing...----------------
+[Register]--> id: 78 name: jiadai passwd: 123456 type: 1
+----------------Thread id: < 140021503895296 > Dealing...----------------
+[Login]--> id: 78 passwd: 123456 type: 1
+== Author: Daijia = 2020-03-22 15:20:28 == client ip: 0.0.0.0, port: 0 exit!
+----------------Thread id: < 140712157685504 > Running...----------------
+----------------Thread id: < 140712149292800 > Running...----------------
+----------------Thread id: < 140712140900096 > Running...----------------
+----------------Thread id: < 140712132507392 > Running...----------------
+----------------Thread id: < 140712124114688 > Running...----------------
+
+----------------Mysql id : 0 Create seccess!----------------
+----------------Mysql id : 1 Create seccess!----------------
+----------------Mysql id : 2 Create seccess!----------------
+----------------Mysql id : 3 Create seccess!----------------
+----------------Mysql id : 4 Create seccess!----------------
+
+----------------Redis id : 0 Create seccess!----------------
+----------------Redis id : 1 Create seccess!----------------
+----------------Redis id : 2 Create seccess!----------------
+----------------Redis id : 3 Create seccess!----------------
+----------------Redis id : 4 Create seccess!----------------
+== Author: Daijia = 2020-03-22 15:28:13 == client ip: 0.0.0.0, port: 0 connect success!
+----------------Thread id: < 140712157685504 > Dealing...----------------
+[Register]--> id: 55555 name: jiadai passwd: 55555 type: 0
+----------------Thread id: < 140712149292800 > Dealing...----------------
+[Login]--> id: 55555 passwd: 55555 type: 0
+----------------Thread id: < 139678266935040 > Running...----------------
+----------------Thread id: < 139678258542336 > Running...----------------
+----------------Thread id: < 139678250149632 > Running...----------------
+----------------Thread id: < 139678241756928 > Running...----------------
+----------------Thread id: < 139678233364224 > Running...----------------
+
+----------------Mysql id : 0 Create seccess!----------------
+----------------Mysql id : 1 Create seccess!----------------
+----------------Mysql id : 2 Create seccess!----------------
+----------------Mysql id : 3 Create seccess!----------------
+----------------Mysql id : 4 Create seccess!----------------
+
+----------------Redis id : 0 Create seccess!----------------
+----------------Redis id : 1 Create seccess!----------------
+----------------Redis id : 2 Create seccess!----------------
+----------------Redis id : 3 Create seccess!----------------
+----------------Redis id : 4 Create seccess!----------------
+== Author: Daijia = 2020-03-22 16:12:38 == client ip: 0.0.0.0, port: 0 connect success!
+----------------Thread id: < 140712140900096 > Dealing...----------------
+[Register]--> id: 43 name: 1 passwd: 1 type: 0
+----------------Thread id: < 140121363875584 > Running...----------------
+----------------Thread id: < 140121355482880 > Running...----------------
+----------------Thread id: < 140121347090176 > Running...----------------
+----------------Thread id: < 140121338697472 > Running...----------------
+----------------Thread id: < 140121330304768 > Running...----------------
+
+----------------Mysql id : 0 Create seccess!----------------
+----------------Mysql id : 1 Create seccess!----------------
+----------------Mysql id : 2 Create seccess!----------------
+----------------Mysql id : 3 Create seccess!----------------
+----------------Mysql id : 4 Create seccess!----------------
+
+----------------Redis id : 0 Create seccess!----------------
+----------------Redis id : 1 Create seccess!----------------
+----------------Redis id : 2 Create seccess!----------------
+----------------Redis id : 3 Create seccess!----------------
+----------------Redis id : 4 Create seccess!----------------
+== Author: Jiadai = 2020-03-23 16:05:16 == server start fail, connect fail!
+----------------Thread id: < 140518340085504 > Running...----------------
+----------------Thread id: < 140518331692800 > Running...----------------
+----------------Thread id: < 140518323300096 > Running...----------------
+----------------Thread id: < 140518314907392 > Running...----------------
+----------------Thread id: < 140518306514688 > Running...----------------
+
+----------------Mysql id : 0 Create seccess!----------------
+----------------Mysql id : 1 Create seccess!----------------
+----------------Mysql id : 2 Create seccess!----------------
+----------------Mysql id : 3 Create seccess!----------------
+----------------Mysql id : 4 Create seccess!----------------
+
+----------------Redis id : 0 Create seccess!----------------
+----------------Redis id : 1 Create seccess!----------------
+----------------Redis id : 2 Create seccess!----------------
+----------------Redis id : 3 Create seccess!----------------
+----------------Redis id : 4 Create seccess!----------------
+== Author: Jiadai = 2020-03-23 16:09:40 == client ip: 127.0.0.1, port: 24992 connect success!
+----------------Thread id: < 140518340085504 > Dealing...----------------
+[Register]--> id: 123 name: jiadai passwd: 123456 type: 1
+----------------Thread id: < 140518306514688 > Dealing...----------------
+[Register]--> id: 123 name: ¼Öá· passwd: 123456 type: 1
+----------------Thread id: < 140518323300096 > Dealing...----------------
+[Login]--> id: 123 passwd: 123456 type: 1

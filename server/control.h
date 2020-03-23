@@ -13,8 +13,12 @@
 #include"log.h"
 #include"ser_socket.h"
 
-bool Register(int fd, std::string message);
-bool Login(int fd, std::string message);
+bool Register(int fd, std::string ReqMsg);
+bool Login(int fd, std::string ReqMsg);
+bool SelectQues(int fd, std::string ReqMsg);
+bool InsertQues(int fd, std::string ReqMsg);
+bool DelQues(int fd, std::string ReqMsg);
+bool GetAllQues(int fd, std::string ReqMsg);
 
 class Control
 {

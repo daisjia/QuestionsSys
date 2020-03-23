@@ -80,6 +80,7 @@ void ThreadPoll::Task(int fd, std::string ReqMsg)
 		LOGE("req cmd error!");
 		return;
 	}
+
 	int res = it->second(fd, ReqMsg);
 	if(!res)
 	{

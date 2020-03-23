@@ -72,28 +72,28 @@ void Client::Run()
 	{
 		Put();
 		choice = 0;
-		std::cout << "---> please input choice: ";
+		std::cout << "---> 请选择: ";
 		std::cin >> choice;
-		if(std::cin.fail())
+		if (std::cin.fail())
 		{
 			std::string str;
 			std::cin.clear();
 			std::cin >> str;
 			std::cin.ignore();
-			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			std::cout << "\033[31m[提  示]: 输入错误\033[0m" << std::endl;
 			continue;
 		}
-		
+
 		switch (choice)
 		{
 		case REGISTER: _control->_model[REGISTER]->Process();
 			break;
 		case LOGIN: DealLogin();
 			break;
-		case EXIT: _control->_model[EXIT]->Process();
+		case EXIT: return;
 			break;
 		default:
-			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			std::cout << "\033[31m[提  示]: 输入错误\033[0m" << std::endl;
 			break;
 		}
 	}
@@ -105,7 +105,7 @@ void Client::StudentRun()
 	while (true)
 	{
 		StudentPut();
-		std::cout << "---> please input choice: ";
+		std::cout << "---> 请选择: ";
 		std::cin >> choice;
 		if (std::cin.fail())
 		{
@@ -113,7 +113,7 @@ void Client::StudentRun()
 			std::cin.clear();
 			std::cin >> str;
 			std::cin.ignore();
-			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			std::cout << "\033[31m[提  示]: 输入错误\033[0m" << std::endl;
 			continue;
 		}
 
@@ -127,7 +127,7 @@ void Client::StudentRun()
 		}
 		else
 		{
-			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			std::cout << "\033[31m[提  示]: 输入错误\033[0m" << std::endl;
 			continue;
 		}
 	}
@@ -139,7 +139,7 @@ void Client::TeacherRun()
 	while (true)
 	{
 		AdminPut();
-		std::cout << "---> please input choice: ";
+		std::cout << "---> 请选择: ";
 		std::cin >> choice;
 		if (std::cin.fail())
 		{
@@ -147,7 +147,7 @@ void Client::TeacherRun()
 			std::cin.clear();
 			std::cin >> str;
 			std::cin.ignore();
-			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			std::cout << "\033[31m[提  示]: 输入错误\033[0m" << std::endl;
 			continue;
 		}
 
@@ -163,9 +163,13 @@ void Client::TeacherRun()
 		{
 			_control->_model[DELETE]->Process();
 		}
+		else if (choice == 4)
+		{
+			return;
+		}
 		else
 		{
-			std::cout << "\033[31m===> input error!\033[0m" << std::endl;
+			std::cout << "\033[31m[提  示]: 输入错误\033[0m" << std::endl;
 			continue;
 		}
 	}
@@ -174,31 +178,63 @@ void Client::TeacherRun()
 
 void Client::Put()
 {
-	GetDateTime();
-	std::cout << std::endl;
-	std::cout << "\033[36m-------------- Register : 1 --------------\033[0m" << std::endl;
-	std::cout << "\033[36m-------------- Login  :   2 --------------\033[0m" << std::endl;
-	std::cout << "\033[36m-------------- Exit   :   3 --------------\033[0m" << std::endl;
+	time_t nSeconds;
+	struct tm* pTM;
+	time(&nSeconds);
+	pTM = localtime(&nSeconds);
+	char Buffer[100] = { 0 };
+	sprintf(Buffer, "*--------%04d-%02d-%02d %02d:%02d:%02d---------*",pTM->tm_year + 1900, pTM->tm_mon + 1, pTM->tm_mday, pTM->tm_hour, pTM->tm_min, pTM->tm_sec);
+
+	std::cout << "\033[36m            ------------\033[0m" << std::endl;
+	std::cout << "\033[36m            --菜    单--\033[0m" << std::endl;
+	std::cout << "\033[36m            ------------\033[0m" << std::endl;
+	std::cout << "\033[36m" << Buffer << "\033[0m" << std::endl;
+	std::cout << "\033[36m*------------------------------------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 注    册 : 1 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 登    录 : 2 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 退    出 : 3 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*------------------------------------*\033[0m" << std::endl;
 }
 
 void Client::StudentPut()
 {
-	GetDateTime();
-	std::cout << std::endl;
-	std::cout << "\033[36m-----------------STUDENT------------------\033[0m" << std::endl;
-	std::cout << "\033[36m--------------   抽题 : 1   --------------\033[0m" << std::endl;
-	std::cout << "\033[36m--------------   退出 : 2   --------------\033[0m" << std::endl;
+	time_t nSeconds;
+	struct tm* pTM;
+	time(&nSeconds);
+	pTM = localtime(&nSeconds);
+	char Buffer[100] = { 0 };
+	sprintf(Buffer, "*--------%04d-%02d-%02d %02d:%02d:%02d---------*", pTM->tm_year + 1900, pTM->tm_mon + 1, pTM->tm_mday, pTM->tm_hour, pTM->tm_min, pTM->tm_sec);
+
+	std::cout << "\033[36m            ------------\033[0m" << std::endl;
+	std::cout << "\033[36m            --学    生--\033[0m" << std::endl;
+	std::cout << "\033[36m            ------------\033[0m" << std::endl;
+	std::cout << "\033[36m" << Buffer << "\033[0m" << std::endl;
+	std::cout << "\033[36m*------------------------------------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 抽    题 : 1 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 退    出 : 2 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*------------------------------------*\033[0m" << std::endl;
 }
 
 void Client::AdminPut()
 {
-	GetDateTime();
-	std::cout << std::endl;
-	std::cout << "\033[36m--------------------ADMIN-------------------\033[0m" << std::endl;
-	std::cout << "\033[36m--------------   查看题库 : 1 --------------\033[0m" << std::endl;
-	std::cout << "\033[36m--------------   插入题目 : 2 --------------\033[0m" << std::endl;
-	std::cout << "\033[36m--------------   删除题目 : 3 --------------\033[0m" << std::endl;
-	std::cout << "\033[36m--------------    退出 : 4    --------------\033[0m" << std::endl;
+	time_t nSeconds;
+	struct tm* pTM;
+	time(&nSeconds);
+	pTM = localtime(&nSeconds);
+	char Buffer[100] = { 0 };
+	sprintf(Buffer, "*--------%04d-%02d-%02d %02d:%02d:%02d---------*", pTM->tm_year + 1900, pTM->tm_mon + 1, pTM->tm_mday, pTM->tm_hour, pTM->tm_min, pTM->tm_sec);
+
+
+	std::cout << "\033[36m            ------------\033[0m" << std::endl;
+	std::cout << "\033[36m            --老    师--\033[0m" << std::endl;
+	std::cout << "\033[36m            ------------\033[0m" << std::endl;
+	std::cout << "\033[36m" << Buffer << "\033[0m" << std::endl;
+	std::cout << "\033[36m*------------------------------------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 查看题库 : 1 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 插入题目 : 2 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 删除题目 : 3 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 退    出 : 4 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*------------------------------------*\033[0m" << std::endl;
 }
 
 void Client::DealLogin()
@@ -209,11 +245,11 @@ void Client::DealLogin()
 		return;
 	}
 
-	if(ret == STUDENT)
+	if (ret == STUDENT)
 	{
 		StudentRun();
 	}
-	else if(ret == ADMIN)
+	else if (ret == ADMIN)
 	{
 		TeacherRun();
 	}

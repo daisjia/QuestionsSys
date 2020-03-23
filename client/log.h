@@ -11,7 +11,7 @@
 	struct tm* pTM; \
 	time(&nSeconds); \
 	pTM = localtime(&nSeconds); \
-	fprintf(stdout, "== Author: Daijia = %04d-%02d-%02d %02d:%02d:%02d == ", \
+	fprintf(stdout, "== Author: Jiadai = %04d-%02d-%02d %02d:%02d:%02d == ", \
 	pTM->tm_year + 1900, pTM->tm_mon + 1, pTM->tm_mday, \
 	pTM->tm_hour, pTM->tm_min, pTM->tm_sec); }
 

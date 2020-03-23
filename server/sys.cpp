@@ -118,7 +118,7 @@ void Sys::Run()
 			{
 				struct sockaddr_in caddr;
 				int clifd = SerSocket::GetSerSocket()->Accept(caddr);
-				LOGI("ip: %s, port: %d connect success!", inet_ntoa(caddr.sin_addr), ntohs(caddr.sin_port));
+				LOGI("client ip: %s, port: %d connect success!", inet_ntoa(caddr.sin_addr), ntohs(caddr.sin_port));
 				if (clifd <= 0)
 				{
 					continue;
@@ -134,7 +134,7 @@ void Sys::Run()
 			{
 				epoll_ctl(_epollfd, EPOLL_CTL_DEL, fd, NULL);
 				close(fd);
-				LOGI("ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
+				LOGI("client ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
 				_cliInfo.erase(fd);
 			}
 			else if (events[i].events & EPOLLIN)
@@ -145,9 +145,9 @@ void Sys::Run()
 				{
 					epoll_ctl(_epollfd, EPOLL_CTL_DEL, fd, NULL);
 					close(fd);
-					LOGI("ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
+					//LOGI("ip: %s, port: %d exit!", inet_ntoa(_cliInfo[fd].sin_addr), ntohs(_cliInfo[fd].sin_port));
 					_cliInfo.erase(fd);
-					std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
+					//std::cout << SerSocket::GetSerSocket()->GetErrMsg() << std::endl;
 					continue;
 				}
 				PDUHEAD* pReqHeader = (PDUHEAD*)RspBuffer;

@@ -1,5 +1,10 @@
 #!/bin/sh
 
+num=$(ps -ef | grep redis-server | wc -l)
+if [ ${num} -eq 1 ];
+then
+	../myredis/redis-server ../myredis/redis.conf
+fi
 echo "" > a
 
 ps -ef | grep ../balance/balance/main >> a
