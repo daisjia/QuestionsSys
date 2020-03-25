@@ -64,3 +64,10 @@ public:
 	GetAllQues() {};
 	int Process();
 };
+
+class FlushQues : public View
+{
+public:
+	FlushQues() {};
+	int Process();
+};

@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\insert"
   ],
-  "SelectedNode": "\\IM.User.Msg.proto",
+  "SelectedNode": "\\insert.cpp",
   "PreviewInSolutionExplorer": false
 }

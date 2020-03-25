@@ -137,12 +137,12 @@ bool Login(int fd, std::string ReqMsg)
 		if (__id == id && pw == passwd && type == __type)
 		{
 			LOGE("redis get data!");
-			SendResult(fd, IM_OK, IM_OK, "登录成功");
+			SendResult(fd, LOGIN, IM_OK, "登录成功");
 			return true;
 		}
 		else
 		{
-			SendResult(fd, LOGIN, IM_OK, "密码错误，登录失败");
+			SendResult(fd, LOGIN, IM_ERROR, "密码错误，登录失败");
 			return true;
 		}
 	}
@@ -197,22 +197,52 @@ bool InsertQues(int fd, std::string ReqMsg)
 	std::string msg = inse.msg();
 	int degree = inse.degree();
 
-	std::string redisCmd("SADD ");
+	
+	std::string key;
 	if (type == LIST)
-		redisCmd = redisCmd + "list:" + std::to_string(degree) + " ";
+		key = "list:" + std::to_string(degree);
 	else if (type == STRING)
-		redisCmd = redisCmd + "string:" + std::to_string(degree) + " ";
+		key = "string:" + std::to_string(degree);
 	else if (type == STACK)
-		redisCmd = redisCmd + "stack:" + std::to_string(degree) + " ";
+		key = "stack:" + std::to_string(degree);
 	else if (type == QUEUE)
-		redisCmd = redisCmd + "queue:" + std::to_string(degree) + " ";
+		key = "queue:" + std::to_string(degree);
 	else if (type == TREE)
-		redisCmd = redisCmd + "tree:" + std::to_string(degree) + " ";
+		key = "tree:" + std::to_string(degree);
 
-	redisCmd += msg;
+	std::string field = key+"*id:" + std::to_string(rand() % 9999 + 1);
+	std::string cmd = "exists " + key;
+	int flag = RedisPool::GetRedisPool()->Exist(cmd.data());
+	if (flag == -1)
+	{
+		LOGI("redis command fail!");
+		SendResult(fd, INSERT, IM_OK, "服务器出错，插入失败");
+		return false;
+	}
+	else if (flag == 1)
+	{
+		cmd.clear();
+		cmd = "hexists " + key + " " + field;
+		flag = RedisPool::GetRedisPool()->Exist(cmd.data());
+		while (flag == 1)
+		{
+			field.clear();
+			field = key+"*id:" + std::to_string(rand() % 9999 + 1);
+			flag = RedisPool::GetRedisPool()->Exist(cmd.data());
+		}
+		if (flag == -1)
+		{
+			LOGI("redis command fail!");
+			SendResult(fd, INSERT, IM_OK, "服务器出错，插入失败");
+			return false;
+		}
+	}
+
+	std::string redisCmd;
+	redisCmd = "HSET " + key + " " + field + " " + msg;
 	if (!RedisPool::GetRedisPool()->Insert(redisCmd.data()))
 	{
-		LOGE("redis command fail!");
+		LOGI("redis command fail!");
 		SendResult(fd, INSERT, IM_OK, "服务器出错，插入失败");
 		return false;
 	}
@@ -222,12 +252,226 @@ bool InsertQues(int fd, std::string ReqMsg)
 
 bool DelQues(int fd, std::string ReqMsg)
 {
-	return false;
+	PDUHEAD* pReqHeader = (PDUHEAD*)ReqMsg.c_str();
+	std::string req_body = pReqHeader->GetBody();
+	IM::User::Msg::IMRspMsg req;
+	req.ParseFromString(req_body);
+	std::string field = req.msg();
+	std::string key = field.substr(0, field.find('*'));
+	std::string redisCmd = "hdel " + key + " " + field;
+
+	int flag = RedisPool::GetRedisPool()->Del(redisCmd.data());
+	if (flag)
+	{
+		SendResult(fd, GETALL, IM_OK, "删除成功");
+		return true;
+	}
+	else
+	{
+		SendResult(fd, GETALL, IM_OK, "删除失败");
+		return false;
+	}
 }
 
 bool GetAllQues(int fd, std::string ReqMsg)
 {
-	return false;
+	std::string rsp = "\n";
+
+	//处理string
+	std::string key;
+	std::string redisCmd;
+	for (int i = 1; i < 6; ++i)
+	{
+		redisCmd.clear();
+		key.clear();
+		key = "string:" + std::to_string(i);
+		redisCmd = "exists " + key;
+		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		if (flag == -1)
+		{
+			LOGI("redis command fail!");
+			SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+			return false;
+		}
+		else if (flag == 0)
+		{
+			continue;
+		}
+		else
+		{
+			redisCmd.clear();
+			redisCmd = "hgetall " + key;
+			std::map<std::string, std::string> results;
+			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			if (!ret)
+			{
+				LOGI("redis command fail!");
+				SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+				return false;
+			}
+			for (auto it : results)
+			{
+				std::string str = it.first + "[==]" + it.second;
+				rsp = rsp + str + "\n";
+				str.clear();
+			}
+		}
+	}
+
+	for (int i = 1; i < 6; ++i)
+	{
+		redisCmd.clear();
+		key.clear();
+		key = "list:"+std::to_string(i);
+		redisCmd = "exists " + key;
+		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		if (flag == -1)
+		{
+			LOGI("redis command fail!");
+			SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+			return false;
+		}
+		else if (flag == 0)
+		{
+			continue;
+		}
+		else
+		{
+			redisCmd.clear();
+			redisCmd = "hgetall " + key;
+			std::map<std::string, std::string> results;
+			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			if (!ret)
+			{
+				LOGI("redis command fail!");
+				SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+				return false;
+			}
+			for (auto it : results)
+			{
+				std::string str = it.first + "[==]" + it.second;
+				rsp = rsp + str + "\n";
+				str.clear();
+			}
+		}
+	}
+
+	for (int i = 1; i < 6; ++i)
+	{
+		redisCmd.clear();
+		key.clear();
+		key = "stack:" + std::to_string(i);
+		redisCmd = "exists " + key;
+		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		if (flag == -1)
+		{
+			LOGI("redis command fail!");
+			SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+			return false;
+		}
+		else if (flag == 0)
+		{
+			continue;
+		}
+		else
+		{
+			redisCmd.clear();
+			redisCmd = "hgetall " + key;
+			std::map<std::string, std::string> results;
+			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			if (!ret)
+			{
+				LOGI("redis command fail!");
+				SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+				return false;
+			}
+			for (auto it : results)
+			{
+				std::string str = it.first + "[==]" + it.second;
+				rsp = rsp + str + "\n";
+				str.clear();
+			}
+		}
+	}
+
+	for (int i = 1; i < 6; ++i)
+	{
+		redisCmd.clear();
+		key.clear();
+		key = "queue:" + std::to_string(i);
+		redisCmd = "exists " + key;
+		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		if (flag == -1)
+		{
+			LOGI("redis command fail!");
+			SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+			return false;
+		}
+		else if (flag == 0)
+		{
+			continue;
+		}
+		else
+		{
+			redisCmd.clear();
+			redisCmd = "hgetall " + key;
+			std::map<std::string, std::string> results;
+			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			if (!ret)
+			{
+				LOGI("redis command fail!");
+				SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+				return false;
+			}
+			for (auto it : results)
+			{
+				std::string str = it.first + "[==]" + it.second;
+				rsp = rsp + str + "\n";
+				str.clear();
+			}
+		}
+	}
+
+	for (int i = 1; i < 6; ++i)
+	{
+		redisCmd.clear();
+		key.clear();
+		key = "tree:" + std::to_string(i);
+		redisCmd = "exists " + key;
+		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		if (flag == -1)
+		{
+			LOGI("redis command fail!");
+			SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+			return false;
+		}
+		else if (flag == 0)
+		{
+			continue;
+		}
+		else
+		{
+			redisCmd.clear();
+			redisCmd = "hgetall " + key;
+			std::map<std::string, std::string> results;
+			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			if (!ret)
+			{
+				LOGI("redis command fail!");
+				SendResult(fd, GETALL, IM_OK, "服务器出错，获取失败");
+				return false;
+			}
+			for (auto it : results)
+			{
+				std::string str = it.first + "[==]" + it.second;
+				rsp = rsp + str + "\n";
+				str.clear();
+			}
+		}
+	}
+
+	SendResult(fd, GETALL, IM_OK, rsp);
+	return true;
 }
 
 

@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[])
 {
+	srand(time(NULL));
 	Sys* mysys = Sys::GetSys();
 	mysys->Run();
 	return 0;

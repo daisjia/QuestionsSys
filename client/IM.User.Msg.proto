@@ -31,7 +31,7 @@ message IMQuestionMsg
 
 message IMInsertMsg
 {
-	required int32 degree = 1; //难度洗漱
+	required int32 degree = 1; //难度系数
 	required int32 type = 2; //试题类型
 	required bytes msg = 3; //试题内容
 }

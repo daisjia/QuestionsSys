@@ -1,7 +1,10 @@
 #include "client.h"
+extern timeval tv;
 
 Client::Client()
 {
+	gettimeofday(&tv, NULL);
+	tv.tv_sec += 60 * 60;
 	int fd = socket(AF_INET, SOCK_STREAM, 0);
 	sockaddr_in saddr;
 	saddr.sin_family = AF_INET;
@@ -165,6 +168,10 @@ void Client::TeacherRun()
 		}
 		else if (choice == 4)
 		{
+			_control->_model[FLUSH]->Process();
+		}
+		else if (choice == 5)
+		{
 			return;
 		}
 		else
@@ -233,7 +240,8 @@ void Client::AdminPut()
 	std::cout << "\033[36m*----------- 查看题库 : 1 -----------*\033[0m" << std::endl;
 	std::cout << "\033[36m*----------- 插入题目 : 2 -----------*\033[0m" << std::endl;
 	std::cout << "\033[36m*----------- 删除题目 : 3 -----------*\033[0m" << std::endl;
-	std::cout << "\033[36m*----------- 退    出 : 4 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 刷新题库 : 4 -----------*\033[0m" << std::endl;
+	std::cout << "\033[36m*----------- 退    出 : 5 -----------*\033[0m" << std::endl;
 	std::cout << "\033[36m*------------------------------------*\033[0m" << std::endl;
 }
 

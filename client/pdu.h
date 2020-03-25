@@ -11,6 +11,7 @@
 #define SELECT 5	//抽题
 #define INSERT 6	//插入
 #define DELETE 7	//删除
+#define FLUSH 8	    //刷新
 
 //试题类型
 #define STRING 31

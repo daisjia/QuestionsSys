@@ -566,3 +566,25 @@ id: 456 name: 1 passwd: 1 type0
 [Register]--> id: 123 name: ¼Öá· passwd: 123456 type: 1
 ----------------Thread id: < 140518323300096 > Dealing...----------------
 [Login]--> id: 123 passwd: 123456 type: 1
+----------------Thread id: < 139704429135616 > Running...----------------
+----------------Thread id: < 139704420742912 > Running...----------------
+----------------Thread id: < 139704412350208 > Running...----------------
+----------------Thread id: < 139704403957504 > Running...----------------
+----------------Thread id: < 139704395564800 > Running...----------------
+
+----------------Mysql id : 0 Create seccess!----------------
+----------------Mysql id : 1 Create seccess!----------------
+----------------Mysql id : 2 Create seccess!----------------
+----------------Mysql id : 3 Create seccess!----------------
+----------------Mysql id : 4 Create seccess!----------------
+
+----------------Redis id : 0 Create seccess!----------------
+----------------Redis id : 1 Create seccess!----------------
+----------------Redis id : 2 Create seccess!----------------
+----------------Redis id : 3 Create seccess!----------------
+----------------Redis id : 4 Create seccess!----------------
+== Author: Jiadai = 2020-03-25 18:12:29 == client ip: 127.0.0.1, port: 62972 connect success!
+----------------Thread id: < 139704429135616 > Dealing...----------------
+[Login]--> id: 456 passwd: 123456 type: 1
+----------------Thread id: < 139704420742912 > Dealing...----------------
+== Author: Jiadai = 2020-03-25 18:13:40 == client ip: 127.0.0.1, port: 62972 exit!

@@ -19,11 +19,11 @@ void RedisPool::SetConf(int size)
 	{
 		if (CreateOneConnect())
 		{
-			std::cout << "----------------Redis id : " << i << " Create seccess!----------------" << std::endl;
+	//		std::cout << "----------------Redis id : " << i << " Create seccess!----------------" << std::endl;
 		}
 		else
 		{
-			std::cout << "----------------Redis id : " << i << " Create fail!----------------" << std::endl;
+	//		std::cout << "----------------Redis id : " << i << " Create fail!----------------" << std::endl;
 		}
 	}
 }
@@ -237,7 +237,7 @@ bool RedisPool::Del(const char* redisCmd)
 	}
 	if (reply->type == REDIS_REPLY_ERROR)
 	{
-		LOGI("redis command fail!");
+		LOGE("redis command fail!");
 		freeReplyObject(reply);
 		Close(r);
 		return false;

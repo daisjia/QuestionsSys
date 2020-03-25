@@ -9,6 +9,7 @@ Control::Control()
 	_model.insert(std::make_pair(SELECT, new SelectQues()));
 	_model.insert(std::make_pair(GETALL, new GetAllQues()));
 	_model.insert(std::make_pair(DELETE, new DelQues()));
+	_model.insert(std::make_pair(FLUSH, new FlushQues()));
 }
 
 Control::~Control()

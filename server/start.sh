@@ -1,4 +1,4 @@
 #!/bin/sh
 
-./main 8000 >> server.log &
+../balance/balance/main &> /dev/null &
 
