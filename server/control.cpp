@@ -2,6 +2,9 @@
 
 extern int _epollfd;
 extern std::map<int, struct sockaddr_in> _cliInfo;
+extern std::vector<Redis*> redisRead;
+extern Redis* redisWrite;
+static int count = 0;
 
 void SendResult(int fd, int cmd, int ret,std::string ReqMsg)
 {
@@ -40,6 +43,7 @@ Control::Control()
 
 Control::~Control()
 {
+	_model.clear();
 }
 
 bool Register(int fd, std::string ReqMsg)
@@ -60,7 +64,7 @@ bool Register(int fd, std::string ReqMsg)
 	sprintf(redisCmd, "hgetall user:id:%d", id);
 
 	std::map<std::string, std::string> Redisresult;
-	if (!RedisPool::GetRedisPool()->Query(redisCmd, Redisresult))
+	if (!redisRead[count++ % 6]->Query(redisCmd, Redisresult))
 	{
 		LOGE("redis command fail!");
 		SendResult(fd, REGISTER, IM_ERROR, "服务器出错，注册失败");
@@ -122,7 +126,7 @@ bool Login(int fd, std::string ReqMsg)
 	sprintf(redisCmd, "hgetall user:id:%d", id);
 
 	std::map<std::string, std::string> Redisresult;
-	if (!RedisPool::GetRedisPool()->Query(redisCmd, Redisresult))
+	if (!redisRead[count++ % 6]->Query(redisCmd, Redisresult))
 	{
 		LOGE("redis command fail!");
 		SendResult(fd, LOGIN, IM_ERROR, "服务器出错，登录失败");
@@ -168,7 +172,7 @@ bool Login(int fd, std::string ReqMsg)
 	{
 		SendResult(fd, LOGIN, IM_OK, "登录成功");
 		sprintf(redisCmd, "hmset user:id:%d id %d name %s passwd %s type %d", id, id, result["name"][0].c_str(), passwd.c_str(), type);
-		if (!RedisPool::GetRedisPool()->Insert(redisCmd))
+		if (!redisWrite->Insert(redisCmd))
 		{
 			LOGE("redis command fail!");
 			return false;
@@ -184,7 +188,7 @@ bool Login(int fd, std::string ReqMsg)
 
 bool SelectQues(int fd, std::string ReqMsg)
 {
-	return false;
+	return true;
 }
 
 bool InsertQues(int fd, std::string ReqMsg)
@@ -212,7 +216,7 @@ bool InsertQues(int fd, std::string ReqMsg)
 
 	std::string field = key+"*id:" + std::to_string(rand() % 9999 + 1);
 	std::string cmd = "exists " + key;
-	int flag = RedisPool::GetRedisPool()->Exist(cmd.data());
+	int flag = redisRead[count++ % 6]->Exist(cmd.data());
 	if (flag == -1)
 	{
 		LOGI("redis command fail!");
@@ -223,12 +227,12 @@ bool InsertQues(int fd, std::string ReqMsg)
 	{
 		cmd.clear();
 		cmd = "hexists " + key + " " + field;
-		flag = RedisPool::GetRedisPool()->Exist(cmd.data());
+		flag = redisRead[count++ % 6]->Exist(cmd.data());
 		while (flag == 1)
 		{
 			field.clear();
 			field = key+"*id:" + std::to_string(rand() % 9999 + 1);
-			flag = RedisPool::GetRedisPool()->Exist(cmd.data());
+			flag = redisRead[count++ % 6]->Exist(cmd.data());
 		}
 		if (flag == -1)
 		{
@@ -240,7 +244,7 @@ bool InsertQues(int fd, std::string ReqMsg)
 
 	std::string redisCmd;
 	redisCmd = "HSET " + key + " " + field + " " + msg;
-	if (!RedisPool::GetRedisPool()->Insert(redisCmd.data()))
+	if (!redisWrite->Insert(redisCmd.data()))
 	{
 		LOGI("redis command fail!");
 		SendResult(fd, INSERT, IM_OK, "服务器出错，插入失败");
@@ -260,7 +264,7 @@ bool DelQues(int fd, std::string ReqMsg)
 	std::string key = field.substr(0, field.find('*'));
 	std::string redisCmd = "hdel " + key + " " + field;
 
-	int flag = RedisPool::GetRedisPool()->Del(redisCmd.data());
+	int flag = redisWrite->Del(redisCmd.data());
 	if (flag)
 	{
 		SendResult(fd, GETALL, IM_OK, "删除成功");
@@ -286,7 +290,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 		key.clear();
 		key = "string:" + std::to_string(i);
 		redisCmd = "exists " + key;
-		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		int flag = redisRead[count++ % 6]->Exist(redisCmd.data());
 		if (flag == -1)
 		{
 			LOGI("redis command fail!");
@@ -302,7 +306,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 			redisCmd.clear();
 			redisCmd = "hgetall " + key;
 			std::map<std::string, std::string> results;
-			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			bool ret = redisRead[count++ % 6]->Query(redisCmd.data(), results);
 			if (!ret)
 			{
 				LOGI("redis command fail!");
@@ -324,7 +328,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 		key.clear();
 		key = "list:"+std::to_string(i);
 		redisCmd = "exists " + key;
-		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		int flag = redisRead[count++ % 6]->Exist(redisCmd.data());
 		if (flag == -1)
 		{
 			LOGI("redis command fail!");
@@ -340,7 +344,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 			redisCmd.clear();
 			redisCmd = "hgetall " + key;
 			std::map<std::string, std::string> results;
-			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			bool ret = redisRead[count++ % 6]->Query(redisCmd.data(), results);
 			if (!ret)
 			{
 				LOGI("redis command fail!");
@@ -362,7 +366,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 		key.clear();
 		key = "stack:" + std::to_string(i);
 		redisCmd = "exists " + key;
-		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		int flag = redisRead[count++ % 6]->Exist(redisCmd.data());
 		if (flag == -1)
 		{
 			LOGI("redis command fail!");
@@ -378,7 +382,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 			redisCmd.clear();
 			redisCmd = "hgetall " + key;
 			std::map<std::string, std::string> results;
-			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			bool ret = redisRead[count++ % 6]->Query(redisCmd.data(), results);
 			if (!ret)
 			{
 				LOGI("redis command fail!");
@@ -400,7 +404,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 		key.clear();
 		key = "queue:" + std::to_string(i);
 		redisCmd = "exists " + key;
-		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		int flag = redisRead[count++ % 6]->Exist(redisCmd.data());
 		if (flag == -1)
 		{
 			LOGI("redis command fail!");
@@ -416,7 +420,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 			redisCmd.clear();
 			redisCmd = "hgetall " + key;
 			std::map<std::string, std::string> results;
-			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			bool ret = redisRead[count++ % 6]->Query(redisCmd.data(), results);
 			if (!ret)
 			{
 				LOGI("redis command fail!");
@@ -438,7 +442,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 		key.clear();
 		key = "tree:" + std::to_string(i);
 		redisCmd = "exists " + key;
-		int flag = RedisPool::GetRedisPool()->Exist(redisCmd.data());
+		int flag = redisRead[count++ % 6]->Exist(redisCmd.data());
 		if (flag == -1)
 		{
 			LOGI("redis command fail!");
@@ -454,7 +458,7 @@ bool GetAllQues(int fd, std::string ReqMsg)
 			redisCmd.clear();
 			redisCmd = "hgetall " + key;
 			std::map<std::string, std::string> results;
-			bool ret = RedisPool::GetRedisPool()->Query(redisCmd.data(), results);
+			bool ret = redisRead[count++ % 6]->Query(redisCmd.data(), results);
 			if (!ret)
 			{
 				LOGI("redis command fail!");

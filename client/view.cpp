@@ -383,7 +383,7 @@ int InsertQues::Process()
 	int type = 0;
 	std::string str;
 
-	std::cout << "\033[36m*-- String 1--List 2--Stack 3--Queue 4--Tree 5 --*\033[0m" << std::endl;
+	std::cout << "\033[36m*-- String: 1  List : 2  Stack : 3  Queue : 4  Tree : 5 --*\033[0m" << std::endl;
 	std::cout << "---> ÇëÑ¡ÔñÀàÐÍ: ";
 	std::cin >> type;
 	while (std::cin.fail())

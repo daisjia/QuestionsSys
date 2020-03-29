@@ -36,3 +36,5 @@ cc:
 	-rm -rf $(OBJ_DIR) ./bin main *.pb.* core.*
 	make pp
 	@echo
+ll:
+	-rm -rf core*

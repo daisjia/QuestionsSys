@@ -35,3 +35,6 @@ cc:
 	-rm -rf $(OBJ_DIR) ./bin main *.pb.*
 	make pp
 	@echo
+
+tt:
+	g++ -std=c++11 -o test test.cpp IM.User.Msg.pb.cc -ljson -lpthread -lprotobuf

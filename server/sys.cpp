@@ -3,6 +3,8 @@
 #define SIZE 10000
 Sys* Sys::sys = NULL;
 std::mutex Sys::mux;
+std::vector<Redis*> redisRead;
+Redis* redisWrite;
 
 int _epollfd;
 std::map<int, struct sockaddr_in> _cliInfo;
@@ -30,6 +32,12 @@ Sys::~Sys()
 	for (auto& it : t)
 		it.join();
 
+	for (auto it : redisRead)
+		delete it;
+
+	redisRead.clear();
+	delete redisWrite;
+	redisWrite = nullptr;
 	_cliInfo.clear();
 }
 
@@ -82,8 +90,20 @@ Sys::Sys()
 	mysql->SetConf("127.0.0.1", "root", "123456", "item", 5);
 
 	std::cout << std::endl;
-	RedisPool* redis = RedisPool::GetRedisPool();
-	redis->SetConf(5);
+	/*RedisPool* redis = RedisPool::GetRedisPool();
+	redis->SetConf(5);*/
+	redisWrite = new Redis("127.0.0.1", 6379);
+	redisRead.push_back(new Redis("127.0.0.1", 6380));
+	redisRead.push_back(new Redis("127.0.0.1", 6381));
+	redisRead.push_back(new Redis("127.0.0.1", 6380));
+	redisRead.push_back(new Redis("127.0.0.1", 6381));
+	redisRead.push_back(new Redis("127.0.0.1", 6380));
+	redisRead.push_back(new Redis("127.0.0.1", 6381));
+
+	for (auto it : redisRead)
+	{
+		it->ExeCmd("slaveof 127.0.0.1 6379");
+	}
 
 	_epollfd = epoll_create(20);
 	if (_epollfd == -1)
@@ -103,6 +123,7 @@ void Sys::Run()
 {
 	while (true)
 	{
+		//std::cout << "===================================" << std::endl;
 		__TIC1__(Epoll_Wait);
 		struct epoll_event events[SIZE];
 		int n = epoll_wait(_epollfd, events, SIZE, -1);

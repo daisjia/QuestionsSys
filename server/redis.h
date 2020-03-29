@@ -14,6 +14,7 @@
 #include<unistd.h>
 #include<iostream>
 
+#if 0
 #define MAXSIZE 10
 
 class RedisPool
@@ -51,4 +52,25 @@ private:
 	static std::mutex objectLock;
 	static std::mutex poolLock;
 	static RedisPool* redis;
+};
+
+#endif
+
+
+class Redis
+{
+public:
+	~Redis();
+	Redis(const char* ip, int port);
+	void ReConnect();
+	bool Query(const char* redisCmd, std::map<std::string, std::string>& result);
+	bool Insert(const char* redisCmd);
+	int Exist(const char* redisCmd);
+	bool ExeCmd(const char* redisCmd);
+	bool Del(const char* redisCmd);
+private:
+	redisContext* _redis;
+	std::string _ip;
+	int _port;
+	std::mutex mtx;
 };

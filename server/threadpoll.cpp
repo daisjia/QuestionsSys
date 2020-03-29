@@ -29,8 +29,11 @@ ThreadPoll::~ThreadPoll()
 bool ThreadPoll::AppandTask(int fd, std::string ReqMsg)
 {
 	LOGE("bool ThreadPoll::AppandTask(int fd, std::string ReqMsg)");
-	std::unique_lock<std::mutex> guard(_mtx);
-	_tasks.push_back(std::pair<int, std::string>(fd, ReqMsg));
+	do
+	{
+		std::unique_lock<std::mutex> guard(_mtx);
+		_tasks.push_back(std::pair<int, std::string>(fd, ReqMsg));
+	} while (0);
 	_condition.notify_one();
 	LOGE("bool ThreadPoll::AppandTask(int fd, std::string ReqMsg)-->end");
 	return true;
